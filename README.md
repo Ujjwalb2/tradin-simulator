@@ -20,8 +20,12 @@ spread merely doubled. That is a regime, not an edge.
 
 ## Chart replay (manual backtesting)
 
-Market data is not in this repository. Build it first (a few minutes, free sources, no
-keys): `src/build_tf.py` for gold and `src/build_nse.py` for NIFTY / other NSE tickers.
+**Live:** https://ujjwalb2.github.io/tradin-simulator/ (XAUUSD and NIFTY, data up to the last
+build). Trades, drawings and settings are saved in each browser, per ticker.
+
+The dashboard's data (`replay/data/`) is in the repository so the site can load it; the
+research data is not. Rebuild or refresh with `src/build_tf.py` (gold) and
+`src/build_nse.py` (NIFTY / other NSE tickers), then commit `replay/data/` to update the site.
 
 `replay/` is a small TradingView-style bar-replay tool on the same Dukascopy data, from
 2020-01-02: 5m / 15m / 1H / 4H / D candles, replay from any date without seeing the future

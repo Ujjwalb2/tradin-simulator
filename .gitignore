@@ -4,8 +4,7 @@ __pycache__/
 *.pyc
 .DS_Store
 
-# Market data: large (the 1m research file alone is 225 MB), re-downloadable, and the
-# providers' terms are for personal use. Rebuild it with src/fetch_data.py,
-# src/build_tf.py and src/build_nse.py (see README).
-data/
-replay/data/
+# Research and build data: large (the 1m research file alone is 225 MB) and re-downloadable.
+# Rebuild it with src/fetch_data.py, src/build_tf.py and src/build_nse.py (see README).
+# replay/data/ is committed on purpose: it is what the hosted dashboard loads.
+/data/
