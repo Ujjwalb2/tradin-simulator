@@ -1,0 +1,187 @@
+====================================================================================================
+GOLD LIQUIDITY SWEEP + FIB  |  XAUUSD 5m  |  timezone Asia/Kolkata (IST)
+range 11:30-12:30 (body only)   entry window 14:25-21:25
+sweep = candle WICK pierces Fib -1.0 (long) / Fib 2.0 (short); same-candle reclaim allowed
+min penetration 0.0 x ATR
+expiry 12 bars   SL lookback 5 candles   space filter >= 0.25 x ATR(14)
+days 2026-08-26 .. 2026-09-08  (10 sessions)
+====================================================================================================
+
+### 2026-08-26  (Wed)
+   range   low 4626.88   high 4641.16   size 14.28   (12 bars, bodies only)
+   fib -1  4612.60   fib 0 4626.88   fib 1 4641.16   fib 2 4655.44
+   funnel  sweeps 7 (26 bars)   reclaims 6   setups 6  (valid 4, blocked 2)   expired 0
+   OK BUY   sweep 18:00 (1 bars, extreme 4612.35, pen 0.26)
+        reclaim 18:00 close 4623.37  ->  ENTRY 18:05 @ 4623.19   SL 4612.35   risk 10.85   space 2.05ATR   ATR 5.17
+   OK BUY   sweep 18:20 (1 bars, extreme 4611.03, pen 1.57)
+        reclaim 18:20 close 4616.30  ->  ENTRY 18:25 @ 4616.41   SL 4611.03   risk 5.38   space 0.59ATR   ATR 6.51
+   OK BUY   sweep 18:30..19:00 (7 bars, extreme 4598.18, pen 14.42)
+        reclaim 19:00 close 4615.99  ->  ENTRY 19:05 @ 4615.88   SL 4598.18   risk 17.70   space 0.42ATR   ATR 7.73
+   XX BUY   sweep 19:05 (1 bars, extreme 4612.53, pen 0.07)
+        reclaim 19:05 close 4613.47  ->  ENTRY 19:10 @ 4613.89   SL 4598.18   risk 15.70   space 0.17ATR   ATR 7.51
+        blocked: space 0.17 ATR < 0.25
+   OK BUY   sweep 19:10 (1 bars, extreme 4611.92, pen 0.68)
+        reclaim 19:10 close 4619.69  ->  ENTRY 19:15 @ 4619.75   SL 4604.26   risk 15.49   space 0.92ATR   ATR 7.77
+   XX BUY   sweep 20:15 (1 bars, extreme 4611.88, pen 0.73)
+        reclaim 20:15 close 4612.83  ->  ENTRY 20:20 @ 4612.47   SL 4611.88   risk 0.60   space 0.02ATR   ATR 7.24
+        blocked: space 0.02 ATR < 0.25
+
+### 2026-08-27  (Thu)
+   range   low 4600.49   high 4610.40   size 9.91   (12 bars, bodies only)
+   fib -1  4590.58   fib 0 4600.49   fib 1 4610.40   fib 2 4620.31
+   funnel  sweeps 5 (49 bars)   reclaims 5   setups 5  (valid 3, blocked 2)   expired 0
+   XX BUY   sweep 15:05..16:35 (19 bars, extreme 4569.18, pen 21.39)
+        reclaim 16:35 close 4590.77  ->  ENTRY 16:40 @ 4590.77   SL 4585.73   risk 5.04   space 0.04ATR   ATR 4.35
+        blocked: space 0.04 ATR < 0.25
+   OK BUY   sweep 16:40 (1 bars, extreme 4589.82, pen 0.76)
+        reclaim 16:40 close 4592.60  ->  ENTRY 16:45 @ 4592.45   SL 4586.09   risk 6.36   space 0.44ATR   ATR 4.24
+   OK BUY   sweep 18:05..20:10 (26 bars, extreme 4564.65, pen 25.93)
+        reclaim 20:10 close 4595.41  ->  ENTRY 20:15 @ 4595.48   SL 4574.11   risk 21.36   space 0.67ATR   ATR 7.35
+   XX BUY   sweep 20:25 (1 bars, extreme 4588.20, pen 2.37)
+        reclaim 20:25 close 4591.33  ->  ENTRY 20:30 @ 4591.18   SL 4585.82   risk 5.36   space 0.09ATR   ATR 6.81
+        blocked: space 0.09 ATR < 0.25
+   OK BUY   sweep 20:50..20:55 (2 bars, extreme 4588.79, pen 1.78)
+        reclaim 20:55 close 4593.13  ->  ENTRY 21:00 @ 4593.02   SL 4588.79   risk 4.23   space 0.39ATR   ATR 6.35
+
+### 2026-08-28  (Fri)
+   range   low 4573.47   high 4612.75   size 39.28   (12 bars, bodies only)
+   fib -1  4534.18   fib 0 4573.47   fib 1 4612.75   fib 2 4652.03
+   funnel  sweeps 3 (3 bars)   reclaims 2   setups 2  (valid 1, blocked 1)   expired 0
+   OK BUY   sweep 19:55 (1 bars, extreme 4529.90, pen 4.28)
+        reclaim 19:55 close 4552.12  ->  ENTRY 20:00 @ 4552.27   SL 4529.90   risk 22.37   space 1.18ATR   ATR 15.39
+   XX BUY   sweep 21:15 (1 bars, extreme 4532.03, pen 2.15)
+        reclaim 21:15 close 4536.00  ->  ENTRY 21:20 @ 4535.88   SL 4532.03   risk 3.84   space 0.12ATR   ATR 14.00
+        blocked: space 0.12 ATR < 0.25
+
+### 2026-08-31  (Mon)
+   range   low 4432.25   high 4443.02   size 10.78   (12 bars, bodies only)
+   fib -1  4421.47   fib 0 4432.25   fib 1 4443.02   fib 2 4453.80
+   funnel  sweeps 9 (28 bars)   reclaims 9   setups 9  (valid 5, blocked 4)   expired 0
+   XX SELL  sweep 16:20 (1 bars, extreme 4455.57, pen 1.76)
+        reclaim 16:20 close 4453.76  ->  ENTRY 16:25 @ 4453.70   SL 4455.57   risk 1.86   space 0.03ATR   ATR 3.72
+        blocked: space 0.03 ATR < 0.25
+   XX SELL  sweep 16:25..17:15 (11 bars, extreme 4464.12, pen 10.32)
+        reclaim 17:15 close 4453.24  ->  ENTRY 17:20 @ 4453.22   SL 4464.12   risk 10.91   space 0.15ATR   ATR 4.05
+        blocked: space 0.15 ATR < 0.25
+   XX SELL  sweep 17:20 (1 bars, extreme 4454.77, pen 0.97)
+        reclaim 17:20 close 4452.91  ->  ENTRY 17:25 @ 4453.07   SL 4464.05   risk 10.98   space 0.19ATR   ATR 3.92
+        blocked: space 0.19 ATR < 0.25
+   XX SELL  sweep 17:25..17:50 (6 bars, extreme 4461.05, pen 7.25)
+        reclaim 17:50 close 4452.77  ->  ENTRY 17:55 @ 4452.82   SL 4461.05   risk 8.23   space 0.22ATR   ATR 4.56
+        blocked: space 0.22 ATR < 0.25
+   OK SELL  sweep 17:55 (1 bars, extreme 4454.49, pen 0.69)
+        reclaim 17:55 close 4447.72  ->  ENTRY 18:00 @ 4447.60   SL 4461.05   risk 13.45   space 1.31ATR   ATR 4.74
+   OK BUY   sweep 19:20 (1 bars, extreme 4419.26, pen 2.21)
+        reclaim 19:20 close 4424.57  ->  ENTRY 19:25 @ 4424.58   SL 4419.26   risk 5.32   space 0.50ATR   ATR 6.24
+   OK BUY   sweep 19:25..19:35 (3 bars, extreme 4415.76, pen 5.71)
+        reclaim 19:35 close 4427.25  ->  ENTRY 19:40 @ 4427.10   SL 4415.76   risk 11.35   space 0.85ATR   ATR 6.63
+   OK BUY   sweep 19:40 (1 bars, extreme 4421.32, pen 0.15)
+        reclaim 19:40 close 4427.57  ->  ENTRY 19:45 @ 4427.46   SL 4415.76   risk 11.70   space 0.90ATR   ATR 6.63
+   OK BUY   sweep 19:50..20:00 (3 bars, extreme 4416.51, pen 4.96)
+        reclaim 20:00 close 4425.08  ->  ENTRY 20:05 @ 4425.30   SL 4416.51   risk 8.80   space 0.55ATR   ATR 6.99
+
+### 2026-09-01  (Tue)
+   range   low 4429.16   high 4440.06   size 10.90   (12 bars, bodies only)
+   fib -1  4418.25   fib 0 4429.16   fib 1 4440.06   fib 2 4450.96
+   funnel  sweeps 1 (85 bars)   reclaims 0   setups 0  (valid 0, blocked 0)   expired 0
+
+### 2026-09-02  (Wed)
+   range   low 4316.16   high 4326.91   size 10.75   (12 bars, bodies only)
+   fib -1  4305.40   fib 0 4316.16   fib 1 4326.91   fib 2 4337.66
+   funnel  sweeps 7 (46 bars)   reclaims 6   setups 6  (valid 5, blocked 1)   expired 0
+   OK BUY   sweep 14:55 (1 bars, extreme 4304.89, pen 0.52)
+        reclaim 14:55 close 4309.06  ->  ENTRY 15:00 @ 4309.06   SL 4304.89   risk 4.17   space 0.72ATR   ATR 5.05
+   OK BUY   sweep 15:30..15:40 (3 bars, extreme 4301.63, pen 3.77)
+        reclaim 15:40 close 4306.91  ->  ENTRY 15:45 @ 4306.79   SL 4301.63   risk 5.16   space 0.31ATR   ATR 4.45
+   OK BUY   sweep 16:20 (1 bars, extreme 4305.21, pen 0.19)
+        reclaim 16:20 close 4308.51  ->  ENTRY 16:25 @ 4308.38   SL 4305.21   risk 3.16   space 0.76ATR   ATR 3.94
+   XX SELL  sweep 17:50..17:55 (2 bars, extreme 4344.46, pen 6.80)
+        reclaim 17:55 close 4336.40  ->  ENTRY 18:00 @ 4336.32   SL 4344.46   risk 8.14   space 0.21ATR   ATR 6.28
+        blocked: space 0.21 ATR < 0.25
+   OK SELL  sweep 18:00 (1 bars, extreme 4337.77, pen 0.11)
+        reclaim 18:00 close 4330.06  ->  ENTRY 18:05 @ 4330.05   SL 4344.46   risk 14.41   space 1.19ATR   ATR 6.41
+   OK SELL  sweep 18:15..18:20 (2 bars, extreme 4339.32, pen 1.65)
+        reclaim 18:20 close 4334.50  ->  ENTRY 18:25 @ 4334.60   SL 4339.32   risk 4.72   space 0.49ATR   ATR 6.29
+
+### 2026-09-03  (Thu)
+   range   low 4419.13   high 4431.44   size 12.31   (12 bars, bodies only)
+   fib -1  4406.82   fib 0 4419.13   fib 1 4431.44   fib 2 4443.74
+   funnel  sweeps 2 (49 bars)   reclaims 1   setups 1  (valid 1, blocked 0)   expired 0
+   OK SELL  sweep 17:25..17:45 (5 bars, extreme 4450.23, pen 6.49)
+        reclaim 17:45 close 4441.39  ->  ENTRY 17:50 @ 4441.44   SL 4450.23   risk 8.78   space 0.49ATR   ATR 4.64
+
+### 2026-09-04  (Fri)
+   range   low 4461.63   high 4472.30   size 10.67   (12 bars, bodies only)
+   fib -1  4450.96   fib 0 4461.63   fib 1 4472.30   fib 2 4482.97
+   funnel  sweeps 1 (42 bars)   reclaims 0   setups 0  (valid 0, blocked 0)   expired 0
+
+### 2026-09-07  (Mon)
+   range   low 4387.69   high 4398.06   size 10.36   (12 bars, bodies only)
+   fib -1  4377.33   fib 0 4387.69   fib 1 4398.06   fib 2 4408.42
+   funnel  sweeps 8 (32 bars)   reclaims 7   setups 7  (valid 4, blocked 3)   expired 0
+   XX SELL  sweep 14:25..14:45 (5 bars, extreme 4413.94, pen 5.53)
+        reclaim 14:45 close 4408.22  ->  ENTRY 14:50 @ 4408.18   SL 4413.94   risk 5.76   space 0.05ATR   ATR 4.32
+        blocked: space 0.05 ATR < 0.25
+   OK SELL  sweep 14:50..14:55 (2 bars, extreme 4409.61, pen 1.20)
+        reclaim 14:55 close 4405.70  ->  ENTRY 15:00 @ 4405.79   SL 4413.56   risk 7.76   space 0.64ATR   ATR 4.11
+   OK SELL  sweep 15:05..15:25 (5 bars, extreme 4410.42, pen 2.01)
+        reclaim 15:25 close 4405.84  ->  ENTRY 15:30 @ 4405.81   SL 4410.42   risk 4.62   space 0.71ATR   ATR 3.67
+   XX SELL  sweep 19:35 (1 bars, extreme 4408.78, pen 0.36)
+        reclaim 19:35 close 4408.10  ->  ENTRY 19:40 @ 4408.01   SL 4408.78   risk 0.78   space 0.11ATR   ATR 3.64
+        blocked: space 0.11 ATR < 0.25
+   OK SELL  sweep 19:40 (1 bars, extreme 4408.97, pen 0.55)
+        reclaim 19:40 close 4407.20  ->  ENTRY 19:45 @ 4407.26   SL 4408.97   risk 1.71   space 0.33ATR   ATR 3.53
+   XX SELL  sweep 19:45 (1 bars, extreme 4409.25, pen 0.83)
+        reclaim 19:45 close 4407.87  ->  ENTRY 19:50 @ 4407.91   SL 4409.25   risk 1.34   space 0.15ATR   ATR 3.45
+        blocked: space 0.15 ATR < 0.25
+   OK SELL  sweep 19:55 (1 bars, extreme 4408.98, pen 0.56)
+        reclaim 19:55 close 4407.10  ->  ENTRY 20:00 @ 4407.06   SL 4409.25   risk 2.19   space 0.40ATR   ATR 3.38
+
+### 2026-09-08  (Tue)
+   range   low 4400.23   high 4419.68   size 19.45   (12 bars, bodies only)
+   fib -1  4380.78   fib 0 4400.23   fib 1 4419.68   fib 2 4439.13
+   funnel  sweeps 0 (0 bars)   reclaims 0   setups 0  (valid 0, blocked 0)   expired 0
+
+====================================================================================================
+TOTAL   setups 36   valid 23   blocked 13
+        longs 20   shorts 16
+
+      date  side  status            first_sweep_ts                reclaim_ts                  entry_ts   entry      sl  risk  space_atr  penetration
+2026-08-26  long   VALID 2026-08-26 18:00:00+05:30 2026-08-26 18:00:00+05:30 2026-08-26 18:05:00+05:30 4623.19 4612.35 10.85       2.05         0.26
+2026-08-26  long   VALID 2026-08-26 18:20:00+05:30 2026-08-26 18:20:00+05:30 2026-08-26 18:25:00+05:30 4616.41 4611.03  5.38       0.59         1.57
+2026-08-26  long   VALID 2026-08-26 18:30:00+05:30 2026-08-26 19:00:00+05:30 2026-08-26 19:05:00+05:30 4615.88 4598.18 17.70       0.42        14.42
+2026-08-26  long BLOCKED 2026-08-26 19:05:00+05:30 2026-08-26 19:05:00+05:30 2026-08-26 19:10:00+05:30 4613.89 4598.18 15.70       0.17         0.07
+2026-08-26  long   VALID 2026-08-26 19:10:00+05:30 2026-08-26 19:10:00+05:30 2026-08-26 19:15:00+05:30 4619.75 4604.26 15.49       0.92         0.68
+2026-08-26  long BLOCKED 2026-08-26 20:15:00+05:30 2026-08-26 20:15:00+05:30 2026-08-26 20:20:00+05:30 4612.47 4611.88  0.60       0.02         0.73
+2026-08-27  long BLOCKED 2026-08-27 15:05:00+05:30 2026-08-27 16:35:00+05:30 2026-08-27 16:40:00+05:30 4590.77 4585.73  5.04       0.04        21.39
+2026-08-27  long   VALID 2026-08-27 16:40:00+05:30 2026-08-27 16:40:00+05:30 2026-08-27 16:45:00+05:30 4592.45 4586.09  6.36       0.44         0.76
+2026-08-27  long   VALID 2026-08-27 18:05:00+05:30 2026-08-27 20:10:00+05:30 2026-08-27 20:15:00+05:30 4595.48 4574.11 21.36       0.67        25.93
+2026-08-27  long BLOCKED 2026-08-27 20:25:00+05:30 2026-08-27 20:25:00+05:30 2026-08-27 20:30:00+05:30 4591.18 4585.82  5.36       0.09         2.37
+2026-08-27  long   VALID 2026-08-27 20:50:00+05:30 2026-08-27 20:55:00+05:30 2026-08-27 21:00:00+05:30 4593.02 4588.79  4.23       0.39         1.78
+2026-08-28  long   VALID 2026-08-28 19:55:00+05:30 2026-08-28 19:55:00+05:30 2026-08-28 20:00:00+05:30 4552.27 4529.90 22.37       1.18         4.28
+2026-08-28  long BLOCKED 2026-08-28 21:15:00+05:30 2026-08-28 21:15:00+05:30 2026-08-28 21:20:00+05:30 4535.88 4532.03  3.84       0.12         2.15
+2026-08-31 short BLOCKED 2026-08-31 16:20:00+05:30 2026-08-31 16:20:00+05:30 2026-08-31 16:25:00+05:30 4453.70 4455.57  1.86       0.03         1.76
+2026-08-31 short BLOCKED 2026-08-31 16:25:00+05:30 2026-08-31 17:15:00+05:30 2026-08-31 17:20:00+05:30 4453.22 4464.12 10.91       0.15        10.32
+2026-08-31 short BLOCKED 2026-08-31 17:20:00+05:30 2026-08-31 17:20:00+05:30 2026-08-31 17:25:00+05:30 4453.07 4464.05 10.98       0.19         0.97
+2026-08-31 short BLOCKED 2026-08-31 17:25:00+05:30 2026-08-31 17:50:00+05:30 2026-08-31 17:55:00+05:30 4452.82 4461.05  8.23       0.22         7.25
+2026-08-31 short   VALID 2026-08-31 17:55:00+05:30 2026-08-31 17:55:00+05:30 2026-08-31 18:00:00+05:30 4447.60 4461.05 13.45       1.31         0.69
+2026-08-31  long   VALID 2026-08-31 19:20:00+05:30 2026-08-31 19:20:00+05:30 2026-08-31 19:25:00+05:30 4424.58 4419.26  5.32       0.50         2.21
+2026-08-31  long   VALID 2026-08-31 19:25:00+05:30 2026-08-31 19:35:00+05:30 2026-08-31 19:40:00+05:30 4427.10 4415.76 11.35       0.85         5.71
+2026-08-31  long   VALID 2026-08-31 19:40:00+05:30 2026-08-31 19:40:00+05:30 2026-08-31 19:45:00+05:30 4427.46 4415.76 11.70       0.90         0.15
+2026-08-31  long   VALID 2026-08-31 19:50:00+05:30 2026-08-31 20:00:00+05:30 2026-08-31 20:05:00+05:30 4425.30 4416.51  8.80       0.55         4.96
+2026-09-02  long   VALID 2026-09-02 14:55:00+05:30 2026-09-02 14:55:00+05:30 2026-09-02 15:00:00+05:30 4309.06 4304.89  4.17       0.72         0.52
+2026-09-02  long   VALID 2026-09-02 15:30:00+05:30 2026-09-02 15:40:00+05:30 2026-09-02 15:45:00+05:30 4306.79 4301.63  5.16       0.31         3.77
+2026-09-02  long   VALID 2026-09-02 16:20:00+05:30 2026-09-02 16:20:00+05:30 2026-09-02 16:25:00+05:30 4308.38 4305.21  3.16       0.76         0.19
+2026-09-02 short BLOCKED 2026-09-02 17:50:00+05:30 2026-09-02 17:55:00+05:30 2026-09-02 18:00:00+05:30 4336.32 4344.46  8.14       0.21         6.80
+2026-09-02 short   VALID 2026-09-02 18:00:00+05:30 2026-09-02 18:00:00+05:30 2026-09-02 18:05:00+05:30 4330.05 4344.46 14.41       1.19         0.11
+2026-09-02 short   VALID 2026-09-02 18:15:00+05:30 2026-09-02 18:20:00+05:30 2026-09-02 18:25:00+05:30 4334.60 4339.32  4.72       0.49         1.65
+2026-09-03 short   VALID 2026-09-03 17:25:00+05:30 2026-09-03 17:45:00+05:30 2026-09-03 17:50:00+05:30 4441.44 4450.23  8.78       0.49         6.49
+2026-09-07 short BLOCKED 2026-09-07 14:25:00+05:30 2026-09-07 14:45:00+05:30 2026-09-07 14:50:00+05:30 4408.18 4413.94  5.76       0.05         5.53
+2026-09-07 short   VALID 2026-09-07 14:50:00+05:30 2026-09-07 14:55:00+05:30 2026-09-07 15:00:00+05:30 4405.79 4413.56  7.76       0.64         1.20
+2026-09-07 short   VALID 2026-09-07 15:05:00+05:30 2026-09-07 15:25:00+05:30 2026-09-07 15:30:00+05:30 4405.81 4410.42  4.62       0.71         2.01
+2026-09-07 short BLOCKED 2026-09-07 19:35:00+05:30 2026-09-07 19:35:00+05:30 2026-09-07 19:40:00+05:30 4408.01 4408.78  0.78       0.11         0.36
+2026-09-07 short   VALID 2026-09-07 19:40:00+05:30 2026-09-07 19:40:00+05:30 2026-09-07 19:45:00+05:30 4407.26 4408.97  1.71       0.33         0.55
+2026-09-07 short BLOCKED 2026-09-07 19:45:00+05:30 2026-09-07 19:45:00+05:30 2026-09-07 19:50:00+05:30 4407.91 4409.25  1.34       0.15         0.83
+2026-09-07 short   VALID 2026-09-07 19:55:00+05:30 2026-09-07 19:55:00+05:30 2026-09-07 20:00:00+05:30 4407.06 4409.25  2.19       0.40         0.56
+
+written -> out/signals_wick.csv

@@ -1,0 +1,113 @@
+5040 combinations; 6 detection runs
+
+[detect] sweep=close depth=0.0: 2626 setups (4s)
+    pen=0.0 space=0.0 ema=False: 70/5040 (99s)
+    pen=0.0 space=0.0 ema=True: 140/5040 (188s)
+    pen=0.0 space=0.25 ema=False: 210/5040 (275s)
+    pen=0.0 space=0.25 ema=True: 280/5040 (360s)
+    pen=0.0 space=0.5 ema=False: 350/5040 (442s)
+    pen=0.0 space=0.5 ema=True: 420/5040 (524s)
+    pen=0.2 space=0.0 ema=False: 490/5040 (614s)
+    pen=0.2 space=0.0 ema=True: 560/5040 (702s)
+    pen=0.2 space=0.25 ema=False: 630/5040 (789s)
+    pen=0.2 space=0.25 ema=True: 700/5040 (875s)
+    pen=0.2 space=0.5 ema=False: 770/5040 (956s)
+    pen=0.2 space=0.5 ema=True: 840/5040 (1036s)
+[detect] sweep=close depth=0.38: 1465 setups (1039s)
+    pen=0.0 space=0.0 ema=False: 910/5040 (1125s)
+    pen=0.0 space=0.0 ema=True: 980/5040 (1210s)
+    pen=0.0 space=0.25 ema=False: 1050/5040 (1296s)
+    pen=0.0 space=0.25 ema=True: 1120/5040 (1382s)
+    pen=0.0 space=0.5 ema=False: 1190/5040 (1467s)
+    pen=0.0 space=0.5 ema=True: 1260/5040 (1552s)
+    pen=0.2 space=0.0 ema=False: 1330/5040 (1638s)
+    pen=0.2 space=0.0 ema=True: 1400/5040 (1725s)
+    pen=0.2 space=0.25 ema=False: 1470/5040 (1810s)
+    pen=0.2 space=0.25 ema=True: 1540/5040 (1895s)
+    pen=0.2 space=0.5 ema=False: 1610/5040 (1980s)
+    pen=0.2 space=0.5 ema=True: 1680/5040 (2065s)
+[detect] sweep=close depth=0.5: 1261 setups (2068s)
+    pen=0.0 space=0.0 ema=False: 1750/5040 (2807s)
+    pen=0.0 space=0.0 ema=True: 1820/5040 (3710s)
+    pen=0.0 space=0.25 ema=False: 1890/5040 (3799s)
+    pen=0.0 space=0.25 ema=True: 1960/5040 (3928s)
+    pen=0.0 space=0.5 ema=False: 2030/5040 (4113s)
+    pen=0.0 space=0.5 ema=True: 2100/5040 (4203s)
+    pen=0.2 space=0.0 ema=False: 2170/5040 (4293s)
+    pen=0.2 space=0.0 ema=True: 2240/5040 (4382s)
+    pen=0.2 space=0.25 ema=False: 2310/5040 (4468s)
+    pen=0.2 space=0.25 ema=True: 2380/5040 (4553s)
+    pen=0.2 space=0.5 ema=False: 2450/5040 (4639s)
+    pen=0.2 space=0.5 ema=True: 2520/5040 (4725s)
+[detect] sweep=wick depth=0.0: 5665 setups (4732s)
+    pen=0.0 space=0.0 ema=False: 2590/5040 (4836s)
+    pen=0.0 space=0.0 ema=True: 2660/5040 (4934s)
+    pen=0.0 space=0.25 ema=False: 2730/5040 (5120s)
+    pen=0.0 space=0.25 ema=True: 2800/5040 (5251s)
+    pen=0.0 space=0.5 ema=False: 2870/5040 (5356s)
+    pen=0.0 space=0.5 ema=True: 2940/5040 (5445s)
+    pen=0.2 space=0.0 ema=False: 3010/5040 (5540s)
+    pen=0.2 space=0.0 ema=True: 3080/5040 (5631s)
+    pen=0.2 space=0.25 ema=False: 3150/5040 (5723s)
+    pen=0.2 space=0.25 ema=True: 3220/5040 (5814s)
+    pen=0.2 space=0.5 ema=False: 3290/5040 (5902s)
+    pen=0.2 space=0.5 ema=True: 3360/5040 (5984s)
+[detect] sweep=wick depth=0.38: 2331 setups (5988s)
+    pen=0.0 space=0.0 ema=False: 3430/5040 (6081s)
+    pen=0.0 space=0.0 ema=True: 3500/5040 (6171s)
+    pen=0.0 space=0.25 ema=False: 3570/5040 (6260s)
+    pen=0.0 space=0.25 ema=True: 3640/5040 (6361s)
+    pen=0.0 space=0.5 ema=False: 3710/5040 (6451s)
+    pen=0.0 space=0.5 ema=True: 3780/5040 (6541s)
+    pen=0.2 space=0.0 ema=False: 3850/5040 (6627s)
+    pen=0.2 space=0.0 ema=True: 3920/5040 (6715s)
+    pen=0.2 space=0.25 ema=False: 3990/5040 (6804s)
+    pen=0.2 space=0.25 ema=True: 4060/5040 (6893s)
+    pen=0.2 space=0.5 ema=False: 4130/5040 (6982s)
+    pen=0.2 space=0.5 ema=True: 4200/5040 (7069s)
+[detect] sweep=wick depth=0.5: 1971 setups (7073s)
+    pen=0.0 space=0.0 ema=False: 4270/5040 (7163s)
+    pen=0.0 space=0.0 ema=True: 4340/5040 (7253s)
+    pen=0.0 space=0.25 ema=False: 4410/5040 (7347s)
+    pen=0.0 space=0.25 ema=True: 4480/5040 (7440s)
+    pen=0.0 space=0.5 ema=False: 4550/5040 (7537s)
+    pen=0.0 space=0.5 ema=True: 4620/5040 (7633s)
+    pen=0.2 space=0.0 ema=False: 4690/5040 (7728s)
+    pen=0.2 space=0.0 ema=True: 4760/5040 (7818s)
+    pen=0.2 space=0.25 ema=False: 4830/5040 (7908s)
+    pen=0.2 space=0.25 ema=True: 4900/5040 (7994s)
+    pen=0.2 space=0.5 ema=False: 4970/5040 (8080s)
+    pen=0.2 space=0.5 ema=True: 5040/5040 (8170s)
+
+5040 scored combinations -> out/sweep.csv  (8170s)
+
+=== TOP 20 BY IN-SAMPLE, WITH THEIR OUT-OF-SAMPLE RESULT ===
+sweep  depth  pen  space   ema      sl     exit    be  n_is  avgR_is  R_is  n_oos  avgR_oos  R_oos
+ wick   0.00  0.2    0.5  True  atr1.5 fixed2.0 False   443    0.066  29.1    270    -0.029   -7.9
+ wick   0.00  0.2    0.5  True  atr2.0 fixed1.5 False   427    0.055  23.3    267    -0.029   -7.8
+ wick   0.00  0.0    0.5  True  atr1.5 fixed2.0 False   522    0.042  21.8    319    -0.037  -11.8
+ wick   0.00  0.0    0.5  True  atr2.0 fixed1.5 False   503    0.026  13.2    321    -0.029   -9.2
+ wick   0.00  0.2    0.5  True  atr2.0 fixed2.0 False   427    0.026  11.1    267    -0.085  -22.7
+close   0.00  0.2    0.5  True  atr1.5 fixed2.0 False   376    0.021   8.1    222     0.017    3.8
+ wick   0.38  0.0    0.5  True struct5   trail3 False   561    0.012   6.8    372    -0.133  -49.4
+close   0.00  0.2    0.5 False  atr1.5 fixed2.0 False   406    0.014   5.8    235     0.060   14.2
+ wick   0.00  0.2    0.5 False  atr1.5 fixed2.0 False   524    0.011   5.7    337    -0.063  -21.2
+ wick   0.00  0.0    0.5  True  atr2.0 fixed2.0 False   503    0.011   5.7    321    -0.014   -4.4
+ wick   0.00  0.2    0.5  True  atr2.0 fixed1.5  True   427    0.010   4.5    267    -0.044  -11.8
+ wick   0.00  0.2    0.5  True  atr3.0 fixed1.0 False   413    0.009   3.6    250    -0.014   -3.6
+ wick   0.00  0.2    0.5  True  atr3.0 fixed1.0  True   413    0.009   3.6    250    -0.014   -3.6
+close   0.00  0.0    0.5  True  atr1.5 fixed2.0 False   384    0.006   2.5    228     0.016    3.6
+ wick   0.00  0.2    0.5  True  atr2.5 fixed1.5 False   419    0.004   1.7    259    -0.082  -21.3
+ wick   0.00  0.2    0.5  True  atr2.0   trail3  True   427    0.004   1.5    267    -0.089  -23.7
+ wick   0.00  0.2    0.5  True  atr2.5 fixed1.0 False   419    0.003   1.3    259    -0.073  -18.8
+ wick   0.00  0.2    0.5  True  atr2.5 fixed1.0  True   419    0.003   1.3    259    -0.073  -18.8
+ wick   0.38  0.0    0.5  True  atr3.0   trail3  True   546    0.002   1.2    356    -0.091  -32.5
+ wick   0.38  0.0    0.5  True  atr3.0   trail3 False   546    0.001   0.6    356    -0.092  -32.7
+
+=== DOES THE SWEEP GENERALISE? ===
+  positive in-sample      : 23 / 5040
+  positive out-of-sample  : 101 / 5040
+  positive in BOTH        : 3 / 5040
+  IS/OOS avg-R correlation: +0.070
+  best 10% by IS -> mean OOS avg R: -0.0733
+  all combos     -> mean OOS avg R: -0.0741

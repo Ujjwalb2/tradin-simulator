@@ -1,0 +1,40 @@
+============================================================================================
+BACKTEST  XAUUSD 5m  2022-09-01 .. 2026-09-08
+sweep=close  space>=0.25ATR  pen>=0.0ATR  SL 2.0xATR  trail 5  slippage $0.0
+============================================================================================
+sessions 1,247   setups 2,626   valid 1,599   trades 886
+       trades: 886
+         win%: 40.4
+        avg_R: -0.076
+      total_R: -67.4
+   expectancy: -0.076
+           pf: 0.86
+     max_dd_R: -96.9
+         best: 11.3
+        worst: -1.4
+     final_eq: 4694.0
+
+by exit reason:
+              count   mean      sum
+exit_reason                        
+breakeven        57 -0.057   -3.276
+eod_data          4  0.090    0.361
+initial_stop    462 -1.052 -485.935
+trail           363  1.161  421.457
+
+by year:
+      count   mean     sum
+year                      
+2022     78 -0.075  -5.819
+2023    233 -0.091 -21.109
+2024    236 -0.128 -30.172
+2025    212 -0.013  -2.674
+2026    127 -0.060  -7.619
+
+by side:
+       count   mean     sum
+side                       
+long     395  0.049  19.324
+short    491 -0.177 -86.717
+
+written -> out/bt_atr.csv

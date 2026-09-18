@@ -1,0 +1,101 @@
+XAUUSD: 2022-09-01 -> 2026-09-08 (1259 candidate days, both sides)
+  bid: 100/1259 days
+  bid: 200/1259 days
+  ! bid 2023-03-05: HTTP Error 429: Too Many Requests
+  ! bid 2023-03-28: HTTP Error 429: Too Many Requests
+  ! bid 2023-04-25: HTTP Error 429: Too Many Requests
+  ! bid 2023-04-30: HTTP Error 429: Too Many Requests
+  ! bid 2023-06-07: HTTP Error 429: Too Many Requests
+  ! bid 2023-06-02: HTTP Error 429: Too Many Requests
+  ! bid 2023-06-13: HTTP Error 429: Too Many Requests
+  ! bid 2023-06-14: HTTP Error 429: Too Many Requests
+  ! bid 2023-07-03: HTTP Error 429: Too Many Requests
+  ! bid 2023-07-06: HTTP Error 429: Too Many Requests
+  bid: 300/1259 days
+  ! bid 2023-09-06: HTTP Error 429: Too Many Requests
+  ! bid 2023-09-07: HTTP Error 429: Too Many Requests
+  ! bid 2023-09-22: HTTP Error 429: Too Many Requests
+  ! bid 2023-10-02: HTTP Error 429: Too Many Requests
+  ! bid 2023-10-22: HTTP Error 429: Too Many Requests
+  ! bid 2023-11-12: HTTP Error 429: Too Many Requests
+  bid: 400/1259 days
+  ! bid 2023-12-06: HTTP Error 429: Too Many Requests
+  ! bid 2023-12-24: HTTP Error 429: Too Many Requests
+  ! bid 2024-01-18: HTTP Error 429: Too Many Requests
+  ! bid 2024-01-21: HTTP Error 429: Too Many Requests
+  ! bid 2024-01-31: HTTP Error 429: Too Many Requests
+  ! bid 2024-02-06: HTTP Error 429: Too Many Requests
+  ! bid 2024-02-07: HTTP Error 429: Too Many Requests
+  ! bid 2024-02-15: HTTP Error 429: Too Many Requests
+  ! bid 2024-03-06: HTTP Error 429: Too Many Requests
+  ! bid 2024-03-04: HTTP Error 429: Too Many Requests
+  ! bid 2024-03-17: HTTP Error 429: Too Many Requests
+  bid: 500/1259 days
+  ! bid 2024-04-05: HTTP Error 429: Too Many Requests
+  ! bid 2024-04-14: HTTP Error 429: Too Many Requests
+  ! bid 2024-04-18: HTTP Error 429: Too Many Requests
+  ! bid 2024-04-23: HTTP Error 429: Too Many Requests
+  ! bid 2024-07-01: HTTP Error 429: Too Many Requests
+  bid: 600/1259 days
+  bid: 700/1259 days
+  bid: 800/1259 days
+  bid: 900/1259 days
+  bid: 1000/1259 days
+  bid: 1100/1259 days
+  ! bid 2026-06-18: HTTP Error 503: Service Unavailable
+  ! bid 2026-05-04: HTTP Error 503: Service Unavailable
+  ! bid 2026-06-24: HTTP Error 503: Service Unavailable
+  ! bid 2026-06-25: HTTP Error 503: Service Unavailable
+  ! bid 2026-07-01: HTTP Error 503: Service Unavailable
+  ! bid 2026-06-30: HTTP Error 503: Service Unavailable
+  ! bid 2026-07-24: HTTP Error 503: Service Unavailable
+  bid: 1200/1259 days
+  ! bid 2026-09-07: HTTP Error 503: Service Unavailable
+  ! bid 2026-08-20: HTTP Error 503: Service Unavailable
+  ! bid 2026-08-31: HTTP Error 503: Service Unavailable
+  ! bid 2026-08-25: HTTP Error 503: Service Unavailable
+  ask: 100/1259 days
+  ask: 200/1259 days
+  ask: 300/1259 days
+  ask: 400/1259 days
+  ask: 500/1259 days
+  ask: 600/1259 days
+  ! ask 2024-12-02: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-03: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-06: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-09: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-11: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-13: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-15: HTTP Error 503: Service Unavailable
+  ! ask 2024-11-20: HTTP Error 503: Service Unavailable
+  ! ask 2024-11-15: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-24: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-19: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-23: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-08: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-20: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-18: HTTP Error 503: Service Unavailable
+  ! ask 2024-12-26: HTTP Error 503: Service Unavailable
+  ask: 700/1259 days
+  ! ask 2024-12-30: HTTP Error 503: Service Unavailable
+  ! ask 2024-11-18: HTTP Error 503: Service Unavailable
+  ! ask 2025-02-28: HTTP Error 503: Service Unavailable
+  ! ask 2025-03-02: HTTP Error 503: Service Unavailable
+  ! ask 2025-01-30: HTTP Error 503: Service Unavailable
+  ! ask 2025-02-12: HTTP Error 503: Service Unavailable
+  ! ask 2025-03-07: HTTP Error 503: Service Unavailable
+  ! ask 2025-03-03: HTTP Error 503: Service Unavailable
+  ! ask 2025-03-17: HTTP Error 503: Service Unavailable
+  ! ask 2025-03-05: HTTP Error 503: Service Unavailable
+  ! ask 2025-03-19: HTTP Error 503: Service Unavailable
+  ask: 800/1259 days
+  ask: 900/1259 days
+  ask: 1000/1259 days
+  ask: 1100/1259 days
+  ask: 1200/1259 days
+
+1m bars : 1,712,160 rows (1,343,610 with ticks) -> /Users/ujjwal/XAUUSD/data/processed/XAUUSD_1m.parquet
+5m bars : 268,809 rows -> /Users/ujjwal/XAUUSD/data/processed/XAUUSD_5m.parquet
+range   : 2022-09-01 00:00:00+00:00 .. 2026-09-08 23:55:00+00:00  (UTC)
+price   : 1614.90 .. 5598.26
+spread  : median 0.416  p90 0.738

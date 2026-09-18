@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gold Replay</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%87%3C/text%3E%3C/svg%3E">
+<script>document.documentElement.dataset.theme = localStorage.getItem('replay-theme') === 'light' ? 'light' : 'dark';</script>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #131722; --panel: #1e222d; --raised: #2a2e39; --line: #2a2e39; --hover: #363a45; --edge: #434651;
+    --text: #d1d4dc; --muted: #868993; --accent: #2962ff; --strong: #fff; --well: #131722;
+    --buy: #2962ff; --sell: #f23645; --pos: #22ab94; --neg: #f23645; --buyc: #5b8cff; --sellc: #ff5c6c;
+    --field: #363a45; --rowline: #252933; --rowhover: #262a35; --danger: #ff6b78; --errtext: #ff9c9c;
+    --legendhover: rgba(30,34,45,.92); --swatchedge: rgba(255,255,255,.18); --brand: #f0b90b;
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #ffffff; --panel: #ffffff; --raised: #f0f3fa; --line: #e0e3eb; --hover: #f0f3fa; --edge: #d1d4dc;
+    --text: #131722; --muted: #6a6d78; --accent: #2962ff; --strong: #131722; --well: #f0f3fa;
+    --buy: #2962ff; --sell: #f23645; --pos: #089981; --neg: #f23645; --buyc: #2962ff; --sellc: #e0303f;
+    --field: #d1d4dc; --rowline: #eef0f5; --rowhover: #f5f7fb; --danger: #e0303f; --errtext: #d42c3c;
+    --legendhover: rgba(240,243,250,.96); --swatchedge: rgba(0,0,0,.2); --brand: #b8860b;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    display: grid; grid-template-rows: auto minmax(0, 1fr) 210px; height: 100vh; overflow: hidden;
+    background: var(--bg); color: var(--text);
+    font: 13px/1.35 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { background: transparent; border: 1px solid transparent; border-radius: 4px; padding: 4px 8px; cursor: pointer; white-space: nowrap; }
+  button:hover { background: var(--hover); }
+  button.on { background: var(--raised); color: var(--strong); border-color: var(--edge); }
+  button.primary { background: var(--accent); color: #fff; min-width: 78px; }
+  button.primary:hover { background: #1e53e5; }
+  input, select { background: var(--bg); border: 1px solid var(--field); border-radius: 4px; padding: 4px 6px; min-width: 0; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  code { background: var(--raised); padding: 0 4px; border-radius: 3px; }
+
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 5px; padding: 6px 10px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  .brand { font-weight: 700; color: var(--brand); margin-right: 2px; }
+  select.brand { background: transparent; border: 1px solid transparent; font-size: 14px; padding: 2px 4px; cursor: pointer; }
+  select.brand:hover { border-color: var(--edge); }
+  select.brand option { color: var(--text); background: var(--panel); }
+  .group { display: inline-flex; gap: 2px; }
+  .sep { width: 1px; height: 20px; background: var(--line); margin: 0 3px; }
+  .grow { flex: 1; }
+  .toolbar label { color: var(--muted); display: inline-flex; align-items: center; gap: 4px; }
+
+  main { display: grid; grid-template-columns: 42px minmax(0, 1fr) 292px; min-height: 0; }
+  .tools { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; overflow-y: auto; background: var(--panel); border-right: 1px solid var(--line); }
+  .tools button { width: 34px; height: 34px; padding: 0; display: grid; place-items: center; color: var(--text); }
+  .tools button.on { background: var(--accent); color: #fff; }
+  .tools svg, .drawbar svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  .drawbar svg { width: 18px; height: 18px; }
+  .tools .tsep { width: 24px; height: 1px; background: var(--line); margin: 4px 0; }
+  #chartWrap { position: relative; min-width: 0; min-height: 0; }
+  #chart { position: absolute; inset: 0; }
+  #chart.cur-pointer canvas { cursor: pointer !important; }
+  #chart.cur-move canvas { cursor: move !important; }
+  #chart.cur-ns canvas { cursor: ns-resize !important; }
+  #chart.cur-ew canvas { cursor: ew-resize !important; }
+  #chart.cur-crosshair canvas { cursor: crosshair !important; }
+  .drawbar { position: absolute; right: 78px; top: 8px; z-index: 7; display: none; align-items: center; gap: 4px;
+             padding: 4px 6px; background: var(--panel); border: 1px solid var(--edge); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+  .drawbar .dname { color: var(--muted); font-size: 12px; padding: 0 4px; white-space: nowrap; }
+  .drawbar select { padding: 2px 4px; }
+  .drawbar button { padding: 3px 6px; display: grid; place-items: center; }
+  .drawbar .swatches { display: inline-flex; gap: 3px; padding: 0 2px; }
+  .drawbar .swatches button { width: 16px; height: 16px; padding: 0; border-radius: 3px; border: 1px solid var(--swatchedge); }
+  .drawbar .swatches button.on { outline: 2px solid var(--strong); outline-offset: 1px; }
+  .drawbar .dsep { width: 1px; height: 18px; background: var(--line); }
+  .drawbar button.danger:hover { background: rgba(242,54,69,.25); }
+  .ctxmenu { position: absolute; z-index: 8; display: none; min-width: 150px; padding: 4px; background: var(--panel);
+             border: 1px solid var(--edge); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.45); }
+  .ctxmenu button { display: block; width: 100%; text-align: left; padding: 6px 10px; }
+  .ctxmenu button.danger { color: var(--danger); }
+  #legend { position: absolute; left: 10px; top: 6px; z-index: 5; pointer-events: none; font-variant-numeric: tabular-nums; text-shadow: 0 0 4px var(--bg); }
+  #legend .src { color: var(--muted); }
+  #legend .ohlc { margin-left: 10px; }
+  #lgEmas { margin-top: 2px; }
+  #lgEmas .emaitem { pointer-events: auto; display: flex; align-items: center; gap: 6px; width: max-content; padding: 0 5px; margin-left: -5px; border-radius: 3px; line-height: 20px; cursor: pointer; }
+  #lgEmas .emaitem:hover { background: var(--legendhover); }
+  #lgEmas .emaitem.off .ename, #lgEmas .emaitem.off .evalue { opacity: .4; }
+  #lgEmas .eicons { display: none; gap: 1px; }
+  #lgEmas .emaitem:hover .eicons { display: inline-flex; }
+  #lgEmas .eicons button { padding: 1px 3px; color: var(--text); display: grid; place-items: center; }
+  #lgEmas svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
+  #hint { position: absolute; left: 50%; top: 8px; transform: translateX(-50%); z-index: 6; display: none; pointer-events: none; background: var(--accent); color: #fff; padding: 5px 12px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  #toast { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); z-index: 6; display: none; pointer-events: none; max-width: 80%; background: var(--raised); border: 1px solid var(--edge); padding: 7px 14px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,.4); }
+  #toast.err { border-color: var(--neg); color: var(--errtext); }
+  .updatebar { position: fixed; left: 50%; top: 10px; transform: translateX(-50%); z-index: 30; display: none; align-items: center; gap: 12px;
+               background: var(--accent); color: #fff; padding: 8px 10px 8px 16px; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,.5); }
+  .updatebar button { background: #fff; color: var(--accent); font-weight: 600; }
+  .updatebar button:hover { background: #e8ecff; }
+  #loading { position: absolute; inset: 0; z-index: 10; display: grid; place-items: center; text-align: center; background: var(--bg); color: var(--muted); font-size: 15px; line-height: 1.8; }
+
+  aside { overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line); padding: 10px 12px 16px; }
+  aside h3 { margin: 16px 0 8px; font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); }
+  aside h3:first-child { margin-top: 2px; }
+  .replaytime { background: var(--well); border-radius: 4px; padding: 7px 8px; text-align: center; }
+  .replaytime span { display: block; font-size: 11px; color: var(--muted); }
+  .replaytime b { font-size: 15px; color: var(--strong); font-variant-numeric: tabular-nums; }
+  .quote { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; text-align: center; }
+  .quote div { background: var(--well); border-radius: 4px; padding: 6px 2px; }
+  .quote span { display: block; font-size: 11px; color: var(--muted); }
+  .quote b { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--well); padding: 2px; border-radius: 5px; margin-bottom: 8px; }
+  .row { display: grid; grid-template-columns: 86px minmax(0, 1fr) 30px; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .row label { color: var(--muted); }
+  .row select { padding: 3px 2px; }
+  .row input { width: 100%; }
+  .pick { padding: 3px 0; border-color: var(--field); }
+  .pick.on { background: var(--accent); color: #fff; }
+  .buysell { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .buysell button { padding: 7px 4px; font-weight: 700; color: #fff; line-height: 1.3; }
+  .buysell span { font-weight: 400; font-size: 12px; font-variant-numeric: tabular-nums; }
+  button.sell { background: var(--sell); } button.sell:hover { background: #d42c3c; }
+  button.buy { background: var(--buy); } button.buy:hover { background: #1e53e5; }
+  .preview { min-height: 32px; margin-top: 6px; font-size: 12px; color: var(--muted); }
+  .kv { display: flex; justify-content: space-between; padding: 2px 0; font-variant-numeric: tabular-nums; }
+  .kv span { color: var(--muted); }
+  .small { font-size: 11px; color: var(--muted); margin-top: 6px; }
+  .pos { color: var(--pos); } .neg { color: var(--neg); }
+  .emarow { display: grid; grid-template-columns: 16px 24px 40px minmax(0, 1fr) 26px; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .emarow .emaname { color: var(--text); padding: 2px 4px; text-decoration: underline dotted; text-underline-offset: 3px; }
+  .emarow input[type=number] { width: 100%; }
+  .addrow { width: 100%; margin-top: 2px; border: 1px dashed var(--field); color: var(--muted); }
+  .addrow:hover { color: var(--text); }
+  .buyc { color: var(--buyc); } .sellc { color: var(--sellc); }
+
+  footer { display: flex; flex-direction: column; min-height: 0; background: var(--panel); border-top: 1px solid var(--line); }
+  .tabs { display: flex; align-items: center; gap: 2px; padding: 4px 8px; border-bottom: 1px solid var(--line); }
+  .tabs .count { color: var(--muted); }
+  #tabBody { flex: 1; overflow: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 4px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rowline); }
+  th { position: sticky; top: 0; z-index: 1; background: var(--panel); color: var(--muted); font-weight: 500; }
+  th:nth-child(-n+2), td:nth-child(-n+2) { text-align: left; }
+  tbody tr:hover { background: var(--rowhover); }
+  td input { width: 92px; text-align: right; padding: 2px 4px; }
+  td button { padding: 1px 8px; border-color: var(--field); }
+  tr.clickable { cursor: pointer; }
+  .empty { padding: 20px; text-align: center; color: var(--muted); }
+
+  .modal { position: fixed; inset: 0; z-index: 20; display: none; place-items: center; background: rgba(0,0,0,.55); }
+  .modal.open { display: grid; }
+  .modal .box { width: min(660px, 92vw); max-height: 86vh; overflow: auto; background: var(--panel); border: 1px solid var(--edge); border-radius: 8px; padding: 16px 22px 20px; line-height: 1.5; }
+  .modal h2 { margin: 0 0 6px; font-size: 16px; }
+  .modal h4 { margin: 14px 0 2px; }
+  .modal ul { margin: 2px 0; padding-left: 18px; }
+  .modal .close { float: right; }
+  .modal .row { grid-template-columns: 130px minmax(0, 1fr) 0; }
+  .modal .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+  .modal .actions .danger { margin-right: auto; color: var(--danger); border-color: var(--field); }
+  .modal .box.narrow { width: min(470px, 94vw); }
+  .modal .dsh { margin: 14px 0 6px; font-size: 11px; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); }
+  .fiblevels { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 14px; }
+  .fibrow { display: grid; grid-template-columns: 16px minmax(0, 1fr) 26px 22px; gap: 5px; align-items: center; }
+  .fibrow input[type=number] { width: 100%; }
+  .fibrow button, .emarow button { padding: 2px 0; color: var(--muted); }
+  .checks { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin: 10px 0 4px; }
+  .checks label { display: inline-flex; align-items: center; gap: 5px; color: var(--text); }
+  .checks button { margin-left: auto; border-color: var(--field); }
+  .modal .swatches { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  .modal .swatches button { width: 18px; height: 18px; padding: 0; border-radius: 3px; border: 1px solid var(--swatchedge); }
+  input[type=color] { width: 24px; height: 20px; padding: 0; border: none; background: none; cursor: pointer; }
+  input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+  input[type=color]::-webkit-color-swatch { border: 1px solid var(--edge); border-radius: 3px; }
+  kbd { background: var(--raised); border: 1px solid var(--edge); border-bottom-width: 2px; border-radius: 3px; padding: 0 5px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div id="updateBar" class="updatebar">The dashboard was updated. Reload to use the new version. <button id="updateReload">Reload</button></div>
+
+<header class="toolbar">
+  <select id="symbolSel" class="brand" title="Ticker"></select>
+  <div class="group" id="tfGroup">
+    <button data-tf="5m" title="Key 1">5m</button><button data-tf="15m" title="Key 2">15m</button><button data-tf="1h" title="Key 3">1H</button><button data-tf="4h" title="Key 4">4H</button><button data-tf="1d" title="Key 5">D</button>
+  </div>
+  <span class="sep"></span>
+  <button id="btnAddEma" title="Add an EMA indicator">ƒx EMA</button>
+  <span class="sep"></span>
+  <button id="btnPlay" class="primary" title="Play / pause (Space)">▶ Play</button>
+  <button id="btnStep" title="Step forward (→)">Step ⏭</button>
+  <select id="speedSel" title="Replay speed"></select>
+  <select id="stepSel" title="How far one step moves"><option value="tf">Step: 1 bar</option><option value="5m">Step: 5 min</option></select>
+  <span class="sep"></span>
+  <button id="btnSelectBar" title="Click a bar on the chart to restart the replay from it">⇤ Select bar</button>
+  <input id="gotoInput" type="datetime-local" step="300" title="Jump to a date and time (chart timezone)">
+  <button id="btnGoto" title="Jump to the date and time on the left">Go</button>
+  <button id="btnRandom" title="Jump to a random date">🎲 Random</button>
+  <span class="grow"></span>
+  <button id="btnTheme" title="Light theme">☀</button>
+  <button id="btnHelp" title="How it works">?</button>
+</header>
+
+<main>
+  <nav class="tools" id="tools">
+    <button data-tool="trend" title="Trend line"><svg viewBox="0 0 20 20"><path d="M4 16L16 4"/><circle cx="4" cy="16" r="1.6" fill="currentColor"/><circle cx="16" cy="4" r="1.6" fill="currentColor"/></svg></button>
+    <button data-tool="ray" title="Ray"><svg viewBox="0 0 20 20"><path d="M4 15.5L17 5.5"/><circle cx="4" cy="15.5" r="1.6" fill="currentColor"/><path d="M13 5l4 .5-1.2 3.8"/></svg></button>
+    <button data-tool="hline" title="Horizontal line"><svg viewBox="0 0 20 20"><path d="M2 10h16"/><circle cx="10" cy="10" r="1.6" fill="currentColor"/></svg></button>
+    <button data-tool="vline" title="Vertical line"><svg viewBox="0 0 20 20"><path d="M10 2v16"/><circle cx="10" cy="10" r="1.6" fill="currentColor"/></svg></button>
+    <button data-tool="channel" title="Parallel channel"><svg viewBox="0 0 20 20"><path d="M2.5 12L13 3.5M7 16.5L17.5 8"/><path d="M4.8 14.2L15.2 5.8" stroke-dasharray="1.6 2"/></svg></button>
+    <button data-tool="rect" title="Zone (rectangle)"><svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="10" rx="1"/></svg></button>
+    <button data-tool="fib" title="Fib retracement"><svg viewBox="0 0 20 20"><path d="M3 4h14M3 8h14M3 12h14M3 16h14"/><path d="M5 16L15 4" stroke-dasharray="1.6 2"/></svg></button>
+    <button data-tool="long" title="Long position"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="7" fill="#22ab94" fill-opacity=".6" stroke="none"/><rect x="3" y="10" width="14" height="5" fill="#f23645" fill-opacity=".6" stroke="none"/><path d="M3 10h14"/></svg></button>
+    <button data-tool="short" title="Short position"><svg viewBox="0 0 20 20"><rect x="3" y="5" width="14" height="5" fill="#f23645" fill-opacity=".6" stroke="none"/><rect x="3" y="10" width="14" height="7" fill="#22ab94" fill-opacity=".6" stroke="none"/><path d="M3 10h14"/></svg></button>
+    <button data-tool="measure" title="Date and price range"><svg viewBox="0 0 20 20"><rect x="3" y="3" width="14" height="14" rx="1" stroke-dasharray="2 2"/><path d="M10 5.5v9M5.5 10h9"/><path d="M8.5 7L10 5.5 11.5 7M8.5 13L10 14.5l1.5-1.5"/></svg></button>
+    <span class="tsep"></span>
+    <button id="btnUndoDraw" title="Undo (⌘Z / Ctrl+Z; redo with ⇧⌘Z)"><svg viewBox="0 0 20 20"><path d="M7 4.5L3.5 8 7 11.5"/><path d="M4 8h8.5a4 4 0 010 8H9"/></svg></button>
+    <button id="btnClearDraw" title="Remove all drawings"><svg viewBox="0 0 20 20"><path d="M4 6h12M8 6V4h4v2M5.5 6l1 11h7l1-11"/></svg></button>
+  </nav>
+  <div id="chartWrap">
+    <div id="chart"></div>
+    <div id="legend"><div id="lgMain"></div><div id="lgEmas"></div></div>
+    <div id="hint"></div>
+    <div id="drawBar" class="drawbar">
+      <span class="dname" id="dbName"></span>
+      <span class="swatches" id="dbColors"></span>
+      <select id="dbWidth" title="Line width"><option value="1">1 px</option><option value="2">2 px</option><option value="3">3 px</option><option value="4">4 px</option></select>
+      <select id="dbStyle" title="Line style"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="dotted">Dotted</option></select>
+      <span class="dsep"></span>
+      <button id="dbSettings" title="Settings: exact prices and times (or double-click the drawing)"><svg viewBox="0 0 20 20"><path d="M3 6h14M3 14h14"/><circle cx="7.5" cy="6" r="2" style="fill:var(--panel)"/><circle cx="12.5" cy="14" r="2" style="fill:var(--panel)"/></svg></button>
+      <button id="dbClone" title="Clone"><svg viewBox="0 0 20 20"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M13 7V4.5a1 1 0 00-1-1H4.5a1 1 0 00-1 1V12a1 1 0 001 1H7"/></svg></button>
+      <button id="dbLock" title="Lock"><svg viewBox="0 0 20 20"><rect x="4.5" y="9" width="11" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 016 0V9"/></svg></button>
+      <button id="dbDelete" class="danger" title="Delete (Del)"><svg viewBox="0 0 20 20"><path d="M4 6h12M8 6V4h4v2M5.5 6l1 11h7l1-11"/></svg></button>
+    </div>
+    <div id="ctxMenu" class="ctxmenu">
+      <button data-act="settings">Settings…</button>
+      <button data-act="clone">Clone</button>
+      <button data-act="lock">Lock</button>
+      <button data-act="delete" class="danger">Delete</button>
+    </div>
+    <div id="toast"></div>
+    <div id="loading">Loading gold price data…</div>
+  </div>
+
+  <aside>
+    <div class="replaytime" title="Close of the last revealed 5-minute bar"><span>Replay time</span><b id="clock"></b></div>
+    <h3>Quote</h3>
+    <div class="quote">
+      <div><span id="qBidLbl">Bid</span><b id="qBid">—</b></div>
+      <div id="qAskBox"><span>Ask</span><b id="qAsk">—</b></div>
+      <div id="qSprBox"><span>Spread</span><b id="qSpr">—</b></div>
+    </div>
+
+    <h3>New order</h3>
+    <div class="seg" id="ordType">
+      <button data-type="market">Market</button><button data-type="limit">Limit</button><button data-type="stop">Stop</button>
+    </div>
+    <div class="row" id="rowPrice"><label for="inPrice">Price</label><input id="inPrice" type="number" step="0.01"><button class="pick" data-pick="inPrice" title="Pick the price on the chart">⌖</button></div>
+    <div class="row"><label for="inSL">Stop loss</label><input id="inSL" type="number" step="0.01" placeholder="none"><button class="pick" data-pick="inSL" title="Pick the stop on the chart">⌖</button></div>
+    <div class="row"><label for="inTP">Take profit</label><input id="inTP" type="number" step="0.01" placeholder="none"><button class="pick" data-pick="inTP" title="Pick the target on the chart">⌖</button></div>
+    <div class="row"><select id="sizeMode" title="Size by fixed lots or by % of equity risked to the stop"><option value="lots">Lots</option><option value="risk">Risk %</option></select><input id="inSize" type="number" step="0.01" min="0.01"><span></span></div>
+    <div class="buysell">
+      <button id="btnSell" class="sell">SELL<br><span id="sellPx">—</span></button>
+      <button id="btnBuy" class="buy">BUY<br><span id="buyPx">—</span></button>
+    </div>
+    <div class="preview" id="preview"></div>
+
+    <h3>Account</h3>
+    <div class="kv"><span>Balance</span><b id="accBal"></b></div>
+    <div class="kv"><span>Equity</span><b id="accEq"></b></div>
+    <div class="kv"><span>Open P&amp;L</span><b id="accOpen"></b></div>
+
+    <h3>Performance</h3>
+    <div class="kv"><span>Closed trades</span><b id="stN"></b></div>
+    <div class="kv"><span>Win rate</span><b id="stWin"></b></div>
+    <div class="kv"><span>Net P&amp;L</span><b id="stNet"></b></div>
+    <div class="kv"><span>Profit factor</span><b id="stPF"></b></div>
+    <div class="kv"><span>Average R</span><b id="stR"></b></div>
+    <div class="kv"><span>Expectancy / trade</span><b id="stExp"></b></div>
+    <div class="kv"><span>Max drawdown</span><b id="stDD"></b></div>
+
+    <h3>Indicators</h3>
+    <div id="emaRows"></div>
+
+    <h3>Settings</h3>
+    <div class="row"><label for="tzSel">Timezone</label><select id="tzSel" title="Timezone for the chart, clock and trade times"></select><span></span></div>
+    <div class="row"><label for="setBal">Start balance</label><input id="setBal" type="number" step="100" min="100"><span></span></div>
+    <div class="row"><label for="setComm">Commission</label><input id="setComm" type="number" step="0.5" min="0" title="Round-turn commission per lot"><span class="small" id="commUnit">$/lot</span></div>
+    <div class="row"><label for="setSlip">Slippage</label><input id="setSlip" type="number" step="0.01" min="0" title="Extra price per fill on market, stop and stop-loss orders"><span class="small" id="slipUnit">$/oz</span></div>
+    <div class="row"><label for="setLot">Lot size</label><input id="setLot" type="number" step="1" min="0" title="Units per lot, used for P&amp;L and risk sizing"><span class="small" id="lotUnit">oz</span></div>
+    <div class="small" id="fillInfo"></div>
+  </aside>
+</main>
+
+<footer>
+  <div class="tabs">
+    <button data-tab="positions">Positions <span class="count" id="cntPos"></span></button>
+    <button data-tab="orders">Orders <span class="count" id="cntOrd"></span></button>
+    <button data-tab="history">History <span class="count" id="cntHist"></span></button>
+    <span class="grow"></span>
+    <button id="btnExport" title="Download the trade history as CSV">Export CSV</button>
+    <button id="btnReset" title="Clear positions, orders and history">Reset session</button>
+  </div>
+  <div id="tabBody"></div>
+</footer>
+
+<div class="modal" id="help">
+  <div class="box">
+    <button class="close" data-close>✕</button>
+    <h2>Gold Replay</h2>
+    <div class="small" id="dataInfo"></div>
+    <h4>Replay</h4>
+    <ul>
+      <li>Pick a start with <b>Go</b> (date and time in the chart timezone), <b>🎲 Random</b>, or <b>⇤ Select bar</b> and click a bar.</li>
+      <li><b>Step</b> reveals one chart bar, or five minutes when set to <i>Step: 5 min</i> (watch a 1H or 4H candle form). <b>Play</b> keeps stepping at the chosen speed.</li>
+      <li>Switch timeframe at any time: the last bar on 15m, 1H, 4H and D is the one still forming, built from the 5-minute bars seen so far.</li>
+      <li>Daily bars run 17:00 → 17:00 New York, and 4H bars start at 17:00, 21:00, 01:00, 05:00, 09:00, 13:00 New York (the MT4/MT5 and TradingView convention).</li>
+    </ul>
+    <h4>Trading</h4>
+    <ul>
+      <li>Market orders fill at the close of the current 5-minute bar: buys at the ask, sells at the bid.</li>
+      <li>Limit and stop orders trigger on the 5-minute ask (buys) or bid (sells). A gap fills at the bar's open.</li>
+      <li>Longs exit on the bid and shorts on the ask, so every trade pays the real spread.</li>
+      <li>If a stop loss and take profit are both touched inside one 5-minute bar, the stop is assumed to hit first. On the bar a pending order fills, only the stop loss is checked.</li>
+      <li><b>⌖</b> next to a field, then click the chart, sets that price. <b>Risk %</b> sizes the lot from your stop distance.</li>
+      <li>Going back in time needs no open positions; pending orders are cancelled. Going forward with <b>Go</b> plays every bar in between, so open trades are managed.</li>
+    </ul>
+    <h4>Drawing and indicators</h4>
+    <ul>
+      <li>Tools on the left: trend line, ray, horizontal and vertical line, parallel channel, zone, Fib retracement, long and short position, date and price range. The hint at the top says what to click.</li>
+      <li>A <b>long/short position</b> is three clicks (entry, stop, target) and plays out as you replay: it shows <i>open</i>, <i>target hit</i> or <i>stopped</i> in R, using the same fill rules as real orders.</li>
+      <li>Click a drawing to select it. Drag a handle to reshape it, drag anywhere else on it to move it. The bar above the chart sets colour, width and style, and has settings, clone, lock and delete.</li>
+      <li>Double-click a drawing (or right-click → Settings) to type exact prices and times. A position's box can be given an end time: drag its right-hand handle.</li>
+      <li>Drawings are pinned to time and price, so they stay in place on every timeframe.</li>
+      <li>EMAs: <b>ƒx EMA</b> adds one. Click an EMA's name in the chart legend (hover shows 👁 ⚙ ✕), double-click its line, or click <i>EMA</i> in the side panel to set length, source, colour, width, style. Changes show live; Cancel undoes them.</li>
+      <li>Fib settings (double-click it): turn levels on/off, edit their values and colours, add or remove levels, extend lines, show levels/prices/background, reverse.</li>
+      <li>Switching timeframe keeps the replay candle on screen at the same zoom, like TradingView replay. Scroll left to load older bars.</li>
+    </ul>
+    <h4>Tickers</h4>
+    <ul>
+      <li>Switch ticker with the menu at the top left (XAUUSD, NIFTY …). Each ticker keeps its own replay time, trades, drawings and settings.</li>
+      <li>NSE data has no bid/ask, so buys and sells fill at the last price; add slippage in Settings. The lot size (NIFTY 65) is editable there too.</li>
+      <li>Add another NSE index or stock with <code>python src/build_nse.py --ticker BANKNIFTY</code> (or RELIANCE, FINNIFTY …) and reload.</li>
+    </ul>
+    <h4>Keys</h4>
+    <ul>
+      <li><kbd>→</kbd> step · <kbd>Space</kbd> play/pause · <kbd>1</kbd>–<kbd>5</kbd> timeframes · <kbd>Esc</kbd> cancel a tool or deselect</li>
+      <li><kbd>Del</kbd> delete the selected drawing · <kbd>⌘Z</kbd> / <kbd>Ctrl+Z</kbd> undo · <kbd>⇧⌘Z</kbd> / <kbd>Ctrl+Y</kbd> redo</li>
+    </ul>
+    <h4>Saving</h4>
+    <ul>
+      <li>Everything (replay time, trades, drawings, settings) is saved in this browser automatically. <b>Export CSV</b> downloads the trade history.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal" id="drawSettings">
+  <div class="box narrow">
+    <h2 id="dsTitle">Settings</h2>
+    <div id="dsFields"></div>
+    <div class="actions"><button id="dsRemove" class="danger">Remove</button><button id="dsCancel">Cancel</button><button id="dsOk" class="primary">OK</button></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

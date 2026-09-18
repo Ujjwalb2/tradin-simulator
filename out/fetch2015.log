@@ -1,0 +1,276 @@
+XAUUSD: 2015-01-01 -> 2026-09-09 (3660 candidate days, both sides)
+  ! bid 2015-03-19: HTTP Error 503: Service Unavailable
+  ! bid 2015-03-01: HTTP Error 503: Service Unavailable
+  ! bid 2015-03-22: HTTP Error 503: Service Unavailable
+  ! bid 2015-03-24: HTTP Error 503: Service Unavailable
+  ! bid 2015-04-07: HTTP Error 503: Service Unavailable
+  ! bid 2015-03-29: HTTP Error 503: Service Unavailable
+  ! bid 2015-03-30: HTTP Error 503: Service Unavailable
+  ! bid 2015-04-13: HTTP Error 503: Service Unavailable
+  ! bid 2015-05-01: HTTP Error 503: Service Unavailable
+  ! bid 2015-04-08: HTTP Error 503: Service Unavailable
+  ! bid 2015-04-28: HTTP Error 503: Service Unavailable
+  ! bid 2015-04-15: HTTP Error 503: Service Unavailable
+  ! bid 2015-05-07: HTTP Error 503: Service Unavailable
+  ! bid 2015-05-10: HTTP Error 503: Service Unavailable
+  ! bid 2015-05-13: HTTP Error 503: Service Unavailable
+  bid: 100/3660 days
+  ! bid 2015-05-06: The read operation timed out
+  bid: 200/3660 days
+  bid: 300/3660 days
+  bid: 400/3660 days
+  bid: 500/3660 days
+  ! bid 2016-08-26: HTTP Error 503: Service Unavailable
+  bid: 600/3660 days
+  bid: 700/3660 days
+  ! bid 2017-07-06: HTTP Error 503: Service Unavailable
+  ! bid 2017-06-07: HTTP Error 503: Service Unavailable
+  ! bid 2017-06-11: HTTP Error 503: Service Unavailable
+  ! bid 2017-07-10: HTTP Error 503: Service Unavailable
+  ! bid 2017-07-25: HTTP Error 503: Service Unavailable
+  ! bid 2017-07-27: HTTP Error 503: Service Unavailable
+  ! bid 2017-07-07: The read operation timed out
+  ! bid 2017-07-31: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-01: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-03: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-07: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-08: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-06: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-11: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-14: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-20: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-10: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-15: HTTP Error 503: Service Unavailable
+  ! bid 2017-09-04: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-29: HTTP Error 503: Service Unavailable
+  ! bid 2017-08-17: The read operation timed out
+  ! bid 2017-09-08: HTTP Error 503: Service Unavailable
+  bid: 800/3660 days
+  bid: 900/3660 days
+  bid: 1000/3660 days
+  ! bid 2018-08-27: HTTP Error 503: Service Unavailable
+  bid: 1100/3660 days
+  ! bid 2018-09-06: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-05: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-17: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-20: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-24: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-26: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-13: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-14: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-31: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-02: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-23: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-12: HTTP Error 503: Service Unavailable
+  ! bid 2018-08-30: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-20: HTTP Error 503: Service Unavailable
+  ! bid 2018-09-17: HTTP Error 503: Service Unavailable
+  bid: 1200/3660 days
+  bid: 1300/3660 days
+  ! bid 2019-08-16: HTTP Error 503: Service Unavailable
+  ! bid 2019-09-01: HTTP Error 503: Service Unavailable
+  ! bid 2019-08-26: HTTP Error 503: Service Unavailable
+  bid: 1400/3660 days
+  ! bid 2019-08-20: HTTP Error 503: Service Unavailable
+  ! bid 2019-08-27: HTTP Error 503: Service Unavailable
+  ! bid 2019-09-17: HTTP Error 503: Service Unavailable
+  ! bid 2019-10-04: HTTP Error 503: Service Unavailable
+  ! bid 2019-10-06: HTTP Error 503: Service Unavailable
+  bid: 1500/3660 days
+  bid: 1600/3660 days
+  bid: 1700/3660 days
+  ! bid 2020-09-09: HTTP Error 503: Service Unavailable
+  bid: 1800/3660 days
+  bid: 1900/3660 days
+  bid: 2000/3660 days
+  ! bid 2021-11-15: HTTP Error 503: Service Unavailable
+  ! bid 2021-11-29: HTTP Error 503: Service Unavailable
+  ! bid 2021-11-21: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-03: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-08: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-12: HTTP Error 503: Service Unavailable
+  bid: 2100/3660 days
+  ! bid 2021-12-21: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-22: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-31: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-27: HTTP Error 503: Service Unavailable
+  ! bid 2021-12-13: HTTP Error 503: Service Unavailable
+  ! bid 2021-11-23: HTTP Error 503: Service Unavailable
+  ! bid 2022-01-03: HTTP Error 503: Service Unavailable
+  ! bid 2022-01-07: HTTP Error 503: Service Unavailable
+  ! bid 2022-01-02: The read operation timed out
+  ! bid 2022-01-16: <urlopen error [Errno 54] Connection reset by peer>
+  bid: 2200/3660 days
+  bid: 2300/3660 days
+  ! bid 2022-08-05: HTTP Error 503: Service Unavailable
+  ! bid 2022-08-09: HTTP Error 503: Service Unavailable
+  ! bid 2022-08-19: HTTP Error 503: Service Unavailable
+  ! bid 2022-08-17: HTTP Error 503: Service Unavailable
+  bid: 2400/3660 days
+  bid: 2500/3660 days
+  bid: 2600/3660 days
+  bid: 2700/3660 days
+  bid: 2800/3660 days
+  bid: 2900/3660 days
+  bid: 3000/3660 days
+  bid: 3100/3660 days
+  bid: 3200/3660 days
+  bid: 3300/3660 days
+  bid: 3400/3660 days
+  bid: 3500/3660 days
+  ! bid 2022-08-11: HTTP Error 503: Service Unavailable
+  repair pass 1: 85 missing bid day(s)
+  ask: 100/3660 days
+  ! ask 2015-06-22: HTTP Error 503: Service Unavailable
+  ! ask 2015-06-25: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-09: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-12: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-18: HTTP Error 503: Service Unavailable
+  ! ask 2015-07-31: HTTP Error 503: Service Unavailable
+  ! ask 2015-07-29: HTTP Error 503: Service Unavailable
+  ! ask 2015-07-30: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-05: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-21: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-14: HTTP Error 503: Service Unavailable
+  ! ask 2015-09-02: HTTP Error 503: Service Unavailable
+  ! ask 2015-08-30: HTTP Error 503: Service Unavailable
+  ! ask 2015-09-01: HTTP Error 503: Service Unavailable
+  ask: 200/3660 days
+  ! ask 2015-09-14: HTTP Error 503: Service Unavailable
+  ! ask 2015-09-10: HTTP Error 503: Service Unavailable
+  ! ask 2015-09-16: HTTP Error 503: Service Unavailable
+  ! ask 2015-09-20: HTTP Error 503: Service Unavailable
+  ! ask 2015-10-01: <urlopen error [Errno 54] Connection reset by peer>
+  ! ask 2015-09-28: <urlopen error [Errno 54] Connection reset by peer>
+  ask: 300/3660 days
+  ask: 400/3660 days
+  ask: 500/3660 days
+  ! ask 2016-10-26: HTTP Error 503: Service Unavailable
+  ! ask 2016-10-24: HTTP Error 503: Service Unavailable
+  ! ask 2016-10-13: HTTP Error 503: Service Unavailable
+  ! ask 2016-10-17: HTTP Error 503: Service Unavailable
+  ! ask 2016-11-04: HTTP Error 503: Service Unavailable
+  ! ask 2016-11-06: HTTP Error 503: Service Unavailable
+  ! ask 2016-11-09: HTTP Error 503: Service Unavailable
+  ! ask 2016-10-25: The read operation timed out
+  ! ask 2016-11-15: HTTP Error 503: Service Unavailable
+  ! ask 2016-11-14: HTTP Error 503: Service Unavailable
+  ! ask 2016-11-11: HTTP Error 503: Service Unavailable
+  ask: 600/3660 days
+  ask: 700/3660 days
+  ! ask 2017-05-28: <urlopen error timed out>
+  ask: 800/3660 days
+  ! ask 2017-09-13: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-03: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-01: HTTP Error 503: Service Unavailable
+  ! ask 2017-10-20: HTTP Error 503: Service Unavailable
+  ! ask 2017-10-18: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-23: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-16: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-26: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-24: HTTP Error 503: Service Unavailable
+  ! ask 2017-11-27: HTTP Error 503: Service Unavailable
+  ! ask 2017-12-03: HTTP Error 503: Service Unavailable
+  ! ask 2017-10-23: The read operation timed out
+  ! ask 2017-12-01: The read operation timed out
+  ask: 900/3660 days
+  ! ask 2018-01-26: <urlopen error timed out>
+  ask: 1000/3660 days
+  ! ask 2018-06-01: HTTP Error 503: Service Unavailable
+  ! ask 2018-05-08: HTTP Error 503: Service Unavailable
+  ! ask 2018-05-29: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-05: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-11: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-03: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-04: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-20: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-19: HTTP Error 503: Service Unavailable
+  ! ask 2018-06-21: HTTP Error 503: Service Unavailable
+  ! ask 2018-05-31: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-03: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-16: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-17: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-13: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-18: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-20: HTTP Error 503: Service Unavailable
+  ! ask 2018-07-02: The read operation timed out
+  ! ask 2018-07-10: HTTP Error 502: Bad Gateway
+  ! ask 2018-07-23: <urlopen error [Errno 54] Connection reset by peer>
+  ! ask 2018-07-09: The read operation timed out
+  ask: 1100/3660 days
+  ! ask 2018-09-13: <urlopen error timed out>
+  ! ask 2019-01-07: HTTP Error 503: Service Unavailable
+  ! ask 2019-01-02: HTTP Error 503: Service Unavailable
+  ! ask 2018-12-31: HTTP Error 503: Service Unavailable
+  ! ask 2018-12-28: HTTP Error 503: Service Unavailable
+  ! ask 2019-01-04: HTTP Error 503: Service Unavailable
+  ! ask 2019-01-24: HTTP Error 503: Service Unavailable
+  ! ask 2019-01-17: HTTP Error 503: Service Unavailable
+  ! ask 2019-01-22: HTTP Error 503: Service Unavailable
+  ! ask 2019-01-25: HTTP Error 503: Service Unavailable
+  ask: 1200/3660 days
+  ask: 1300/3660 days
+  ask: 1400/3660 days
+  ! ask 2019-10-27: HTTP Error 503: Service Unavailable
+  ! ask 2019-10-18: HTTP Error 503: Service Unavailable
+  ! ask 2019-10-21: HTTP Error 503: Service Unavailable
+  ! ask 2019-11-05: HTTP Error 503: Service Unavailable
+  ! ask 2019-10-30: HTTP Error 503: Service Unavailable
+  ! ask 2019-11-14: HTTP Error 503: Service Unavailable
+  ask: 1500/3660 days
+  ! ask 2019-11-01: HTTP Error 503: Service Unavailable
+  ask: 1600/3660 days
+  ask: 1700/3660 days
+  ! ask 2020-12-07: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-05: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-03: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-06: HTTP Error 503: Service Unavailable
+  ! ask 2020-12-21: HTTP Error 503: Service Unavailable
+  ! ask 2020-12-28: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-14: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-17: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-18: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-15: HTTP Error 503: Service Unavailable
+  ask: 1800/3660 days
+  ! ask 2021-01-13: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-19: HTTP Error 503: Service Unavailable
+  ! ask 2021-01-25: HTTP Error 503: Service Unavailable
+  ask: 1900/3660 days
+  ask: 2000/3660 days
+  ! ask 2021-11-09: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-04: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-07: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-02: HTTP Error 503: Service Unavailable
+  ! ask 2021-10-29: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-10: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-11: HTTP Error 503: Service Unavailable
+  ! ask 2021-10-26: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-28: HTTP Error 503: Service Unavailable
+  ! ask 2021-11-26: HTTP Error 503: Service Unavailable
+  ask: 2100/3660 days
+  ask: 2200/3660 days
+  ask: 2300/3660 days
+  ask: 2400/3660 days
+  ask: 2500/3660 days
+  ask: 2600/3660 days
+  ask: 2700/3660 days
+  ask: 2800/3660 days
+  ask: 2900/3660 days
+  ask: 3000/3660 days
+  ask: 3100/3660 days
+  ask: 3200/3660 days
+  ask: 3300/3660 days
+  ask: 3400/3660 days
+  ask: 3500/3660 days
+  ! ask 2022-08-11: HTTP Error 503: Service Unavailable
+  repair pass 1: 108 missing ask day(s)
+  ! retry ask 2015-06-25: HTTP Error 503: Service Unavailable
+  ! retry ask 2015-08-21: HTTP Error 503: Service Unavailable
+  repair pass 2: 2 missing ask day(s)
+
+1m bars : 5,270,400 rows (4,140,742 with ticks) -> /Users/ujjwal/XAUUSD/data/processed/XAUUSD_1m.parquet
+5m bars : 828,668 rows -> /Users/ujjwal/XAUUSD/data/processed/XAUUSD_5m.parquet
+range   : 2015-01-01 23:00:00+00:00 .. 2026-09-09 23:55:00+00:00  (UTC)
+price   : 1046.40 .. 5598.26
+spread  : median 0.331  p90 0.595
+coverage: 3635 sessions with data; 17 weekday(s) with none -> 2015-04-03, 2015-12-25, 2016-01-01, 2016-03-25, 2017-04-14, 2018-03-30, 2019-04-19, 2020-04-10, 2020-12-25, 2021-01-01
