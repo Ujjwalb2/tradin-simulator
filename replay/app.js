@@ -322,9 +322,18 @@ function renderFull(keepZoom, from = null) {
   refreshOverlays();
 }
 
+const maxZoomBars = () => {  // most bars the chart can show: 0.5px per bar is its tightest spacing
+  const w = chart.timeScale().width();
+  return w < 50 ? 5000 : Math.max(20, Math.min(5000, w / 0.5));  // not laid out yet: no limit to apply
+};
+
 function currentZoom() {  // bars across the screen and the margin right of the replay candle
-  const r = chart.timeScale().getVisibleLogicalRange();
-  return r && view ? { bars: r.to - r.from, gap: r.to - (view.k - view.start) } : null;
+  const ts = chart.timeScale(), r = ts.getVisibleLogicalRange();
+  // Before the chart is laid out its range spans every loaded bar; taking that as the user's
+  // zoom would zoom all the way out, so it counts as no zoom at all.
+  if (!r || !view || ts.width() < 50) return null;
+  const bars = r.to - r.from;
+  return bars >= 2 && bars <= maxZoomBars() ? { bars, gap: r.to - (view.k - view.start) } : null;
 }
 
 /* Put the replay candle at the right edge the way TradingView does after a timeframe change or
@@ -332,7 +341,7 @@ function currentZoom() {  // bars across the screen and the margin right of the 
  * auto so the candles can never end up off-screen or squashed by an old manual scale. */
 function showReplayEdge(zoom, gap = null) {
   const last = view.k - view.start;
-  const bars = clamp(zoom ? zoom.bars : S.zoomBars || DEFAULT_ZOOM, 20, 5000);
+  const bars = clamp(zoom ? zoom.bars : S.zoomBars || DEFAULT_ZOOM, 20, maxZoomBars());
   const margin = clamp(gap ?? (zoom ? zoom.gap : 5), 3, bars * 0.4);
   chart.priceScale('right').applyOptions({ autoScale: true });
   chart.timeScale().setVisibleLogicalRange({ from: Math.max(last + margin - bars, -3), to: last + margin });
@@ -396,7 +405,7 @@ function setTf(tf) {  // lands on the replay candle with the same zoom, like Tra
 let extending = false;
 function onVisibleRangeChange(r) {  // remember the zoom; near the oldest loaded bar, load older ones
   if (!r || !view) return;
-  if (!extending) {
+  if (!extending && chart.timeScale().width() >= 50 && r.to - r.from <= maxZoomBars()) {
     S.zoomBars = Math.round(r.to - r.from);
     save();
   }
