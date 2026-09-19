@@ -28,6 +28,29 @@ def epoch_seconds(idx: pd.DatetimeIndex) -> np.ndarray:
     return naive.values.astype("datetime64[s]").astype(np.int64)
 
 
+def read_symbol(symbol: str) -> tuple[dict, dict[str, pd.DataFrame]]:
+    """meta.json and the published bars, in the same shape the builders produce, so a new
+    stretch of bars can be merged onto what is already published."""
+    folder = REPLAY_DATA / symbol
+    meta = json.loads((folder / "meta.json").read_text())
+    names = {"o": "open", "h": "high", "l": "low", "c": "close",
+             "ao": "ask_open", "ah": "ask_high", "al": "ask_low", "ac": "ask_close"}
+    bars: dict[str, pd.DataFrame] = {}
+    for tf, spec in meta["tfs"].items():
+        n, raw = spec["n"], (folder / f"{tf}.bin").read_bytes()
+        cols = {name: np.frombuffer(raw, dtype="<" + kind, count=n, offset=i * 4 * n)
+                for i, (name, kind) in enumerate(spec["cols"])}
+        df = pd.DataFrame(index=pd.DatetimeIndex(pd.to_datetime(cols["t"], unit="s", utc=True), name="time_utc"))
+        if "d" in cols:
+            df["date"] = pd.to_datetime(cols["d"], unit="s").date
+        for short, full in names.items():
+            if short in cols:
+                df[full] = cols[short] / meta["price_scale"]
+        df["volume"] = cols["v"].astype(float)
+        bars[tf] = df
+    return meta, bars
+
+
 def write_symbol(symbol: str, bars: dict[str, pd.DataFrame], meta: dict) -> Path:
     """`bars` maps each timeframe to a frame indexed by bar-open UTC time with open, high,
     low, close, volume (optional ask_open..ask_close on 5m) and a `date` column on 1d."""

@@ -238,7 +238,8 @@ def main() -> None:
         "tz": "Asia/Kolkata", "lot": inst["lot"], "lotStep": 1, "lots": 1, "unit": "units" if inst["is_index"] else "shares",
         "slipUnit": "pts", "balance": 500000, "hasSpread": False, "hasVolume": not inst["is_index"],
         "replayFrom": str(bars["5m"].index[0].tz_convert("Asia/Kolkata").date()),
-        "ccyCode": "INR", "update": f"python src/build_nse.py --ticker {symbol}",
+        "ccyCode": "INR", "ticker": args.ticker.strip().upper(),
+        "update": f"python src/update_replay.py --symbol {symbol}",
     })
 
     print()

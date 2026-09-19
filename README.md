@@ -24,8 +24,20 @@ spread merely doubled. That is a regime, not an edge.
 build). Trades, drawings and settings are saved in each browser, per ticker.
 
 The dashboard's data (`replay/data/`) is in the repository so the site can load it; the
-research data is not. Rebuild or refresh with `src/build_tf.py` (gold) and
-`src/build_nse.py` (NIFTY / other NSE tickers), then commit `replay/data/` to update the site.
+research data is not. A GitHub Action (`.github/workflows/update-data.yml`) adds the previous
+day every morning at 05:30 UTC and pushes it, so the site stays current on its own. It runs
+`src/update_replay.py`, which reads the published bars, rebuilds only the last 7 days and
+replaces the tail (a full rebuild would need ~4,200 Dukascopy files, far more than that feed
+serves inside a job). Run it by hand from the Actions tab (*Run workflow*, with a larger
+*days* to redo a longer stretch), or locally:
+
+```bash
+./.venv/bin/python src/update_replay.py             # both tickers, then commit replay/data/
+./.venv/bin/python src/update_replay.py --verify    # re-read and check what is published
+```
+
+`src/build_tf.py` (gold) and `src/build_nse.py` (NIFTY / other NSE tickers) rebuild a ticker
+from scratch, or add a new one.
 
 `replay/` is a small TradingView-style bar-replay tool on the same Dukascopy data, from
 2020-01-02: 5m / 15m / 1H / 4H / D candles, replay from any date without seeing the future
@@ -69,18 +81,19 @@ API answers 403 to scripts, and its downloads are daily/weekly/monthly only.
 ## Layout
 
 ```
-src/fetch_data.py   Dukascopy downloader: 1m bid+ask candles -> 5m bars
-src/build_tf.py     gold 5m/15m/1h/4h/1d bars from 2020 -> data/tf/ and replay/data/XAUUSD/
-src/build_nse.py    NSE index/stock bars from Upstox -> data/tf/ and replay/data/<TICKER>/
-src/replay_data.py  shared writer for the replay tool's data format
-replay/             bar-replay chart + paper trading (index.html, app.js, serve.py)
-src/aod.py          retired AOD strategy (kept for reproduction)
-src/aod_signal.py   retired live signal
-src/strategy.py     retired liquidity-sweep rulebook
-research/           full research trail, including every failed hypothesis
-data/processed/     XAUUSD_1m.parquet, XAUUSD_5m.parquet, XAUUSD_5m.csv (research set, to 2026-09-09)
-data/tf/            multi-timeframe bars for charting (2020-01-02 onward)
-out/research/       charts and session-level results
+src/fetch_data.py     Dukascopy downloader: 1m bid+ask candles -> 5m bars
+src/build_tf.py       gold 5m/15m/1h/4h/1d bars from 2020 -> data/tf/ and replay/data/XAUUSD/
+src/build_nse.py      NSE index/stock bars from Upstox -> data/tf/ and replay/data/<TICKER>/
+src/replay_data.py    shared reader/writer for the replay tool's data format
+src/update_replay.py  daily top-up: rebuilds the last few days onto the published bars
+replay/               bar-replay chart + paper trading (index.html, app.js, serve.py)
+src/aod.py            retired AOD strategy (kept for reproduction)
+src/aod_signal.py     retired live signal
+src/strategy.py       retired liquidity-sweep rulebook
+research/             full research trail, including every failed hypothesis
+data/processed/       XAUUSD_1m.parquet, XAUUSD_5m.parquet, XAUUSD_5m.csv (research set, to 2026-09-09)
+data/tf/              multi-timeframe bars for charting (2020-01-02 onward)
+out/research/         charts and session-level results
 ```
 
 ## Setup

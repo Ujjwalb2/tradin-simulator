@@ -50,7 +50,7 @@ REPLAY_META = {  # per-symbol settings the replay tool reads from meta.json
     "name": "Gold spot (XAU/USD)", "source": "Dukascopy", "price": "bid",
     "ccy": "$", "locale": "en-US", "lot": 100, "lotStep": 0.01, "lots": 0.1, "unit": "oz",
     "slipUnit": "$/oz", "balance": 10000, "hasSpread": True, "hasVolume": True,
-    "ccyCode": "USD", "update": "python src/build_tf.py",
+    "ccyCode": "USD", "update": "python src/update_replay.py",
 }
 AGG = {
     "open": ("open", "first"),

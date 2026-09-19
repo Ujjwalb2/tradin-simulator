@@ -1,7 +1,7 @@
 {
  "symbol": "NIFTY",
  "price_scale": 1000,
- "built_utc": "2026-09-19 07:25",
+ "built_utc": "2026-09-19 08:42",
  "name": "NIFTY 50",
  "source": "Upstox (NSE)",
  "price": "last",
@@ -18,7 +18,8 @@
  "hasVolume": false,
  "replayFrom": "2022-01-03",
  "ccyCode": "INR",
- "update": "python src/build_nse.py --ticker NIFTY",
+ "ticker": "NIFTY",
+ "update": "python src/update_replay.py --symbol NIFTY",
  "tfs": {
   "5m": {
    "n": 87279,

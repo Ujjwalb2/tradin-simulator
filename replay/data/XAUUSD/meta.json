@@ -1,7 +1,7 @@
 {
  "symbol": "XAUUSD",
  "price_scale": 1000,
- "built_utc": "2026-09-19 07:25",
+ "built_utc": "2026-09-19 08:42",
  "name": "Gold spot (XAU/USD)",
  "source": "Dukascopy",
  "price": "bid",
@@ -16,7 +16,7 @@
  "hasSpread": true,
  "hasVolume": true,
  "ccyCode": "USD",
- "update": "python src/build_tf.py",
+ "update": "python src/update_replay.py",
  "tfs": {
   "5m": {
    "n": 476519,
