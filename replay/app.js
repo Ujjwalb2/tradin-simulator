@@ -2272,32 +2272,40 @@ async function bindSymbolUi() {  // ticker menu, currency and lot labels, bid/as
   }
 }
 
-/* If the tool's files change on disk while this page is open (an update), say so, so a tab
- * never keeps running old code without anyone noticing. */
-async function fileStamp() {
-  const stamps = await Promise.all(['app.js', 'index.html'].map(async (f) =>
-    (await fetch(f, { method: 'HEAD', cache: 'no-store' })).headers.get('Last-Modified') || ''));
-  return stamps.join('|');
+/* An update to the page or script while this tab is open shows a Reload banner. It compares
+ * against the versions actually running (the script as loaded, the page as cached), not what
+ * the server says at load time, so a copy served from the browser cache is caught too. */
+const stampOf = (x) => Date.parse(x) || 0;
+
+async function serverStamps() {
+  const head = async (url) => stampOf((await fetch(url, { method: 'HEAD', cache: 'no-store' })).headers.get('Last-Modified'));
+  return { app: await head('app.js'), page: await head(location.pathname) };
 }
 
 async function watchForUpdates() {
-  let loaded = null;
+  const running = { app: stampOf(window.APP_MODIFIED), page: stampOf(document.lastModified) };
   for (;;) {
     try {
-      const now = await fileStamp();
-      if (loaded == null) loaded = now;
-      else if (now !== loaded) {
+      const now = await serverStamps();
+      if ((running.app && now.app > running.app + 1000) || (running.page && now.page > running.page + 1000)) {
         $('#updateBar').style.display = 'flex';
         return;
       }
-    } catch { /* server stopped: nothing to compare against */ }
+    } catch { /* offline or server stopped: nothing to compare against */ }
     await new Promise((r) => setTimeout(r, 15000));
   }
 }
 
+async function reloadFresh() {  // refresh the cached page and script first, or reload could reuse them
+  try {
+    await Promise.all([fetch(location.pathname + location.search, { cache: 'reload' }), fetch('app.js', { cache: 'reload' })]);
+  } catch { /* reload anyway */ }
+  location.reload();
+}
+
 async function init() {
   watchForUpdates();
-  $('#updateReload').onclick = () => location.reload();
+  $('#updateReload').onclick = reloadFresh;
   try {
     if (!window.LightweightCharts) await loadScript(CDN_FALLBACK);
     LC = window.LightweightCharts;

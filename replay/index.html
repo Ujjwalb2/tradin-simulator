@@ -368,6 +368,15 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
-<script src="app.js"></script>
+<script>
+  // app.js is always revalidated with the server (GitHub Pages lets browsers cache files for
+  // ten minutes, which would otherwise keep running an old version after an update).
+  fetch('app.js', { cache: 'no-cache' }).then(async (r) => {
+    window.APP_MODIFIED = r.headers.get('Last-Modified') || '';
+    const s = document.createElement('script');
+    s.textContent = await r.text();
+    document.body.appendChild(s);
+  }).catch((e) => { document.getElementById('loading').textContent = 'Could not load app.js: ' + e.message; });
+</script>
 </body>
 </html>
