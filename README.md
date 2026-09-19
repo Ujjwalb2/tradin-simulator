@@ -48,8 +48,8 @@ from scratch, or add a new one.
 screen at the same zoom, like TradingView replay), paper trading with real bid/ask fills,
 drawing tools (trend line, ray, horizontal and vertical line, parallel channel, zone, Fib with
 editable levels, long/short position, date and price range) that select, drag, restyle and
-undo like TradingView, and EMAs you edit from the chart legend (length, source, colour, width,
-style).
+undo like TradingView, EMAs you edit from the chart legend (length, source, colour, width,
+style), and session marks: a day-break line plus Sydney / Tokyo / London / New York range boxes.
 
 ```bash
 ./.venv/bin/python src/build_tf.py      # add new days: 2020-01-01 -> yesterday (UTC)

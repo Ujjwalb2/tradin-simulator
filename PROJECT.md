@@ -110,6 +110,12 @@ only the stop loss is checked. NSE has no bid/ask, so both sides fill at the las
 - Up to 10 EMAs, each with length, source, colour, width and style, edited from the chart legend
   (click the row, the ⚙, the ƒx button, or double-click the line itself). `emaValues` runs over
   closed bars; `emaForming` handles the forming bar.
+- Session marks (`paintSessionBreaks`, `paintSessionBands`, toggled under *Sessions* in the side
+  panel): a dotted line at each day boundary, and a high/low box per market session. The four
+  sessions are defined in `SESSIONS` by each city's own local hours, so daylight saving is the
+  timezone's problem, not ours. Boxes are built from revealed 5m bars only, so they grow with the
+  replay; they are skipped on the daily chart and past `SESSION_MAX_DAYS` on screen. They default
+  on for a 24-hour market (gold) and off for NSE.
 - Session state (`S`) is saved per symbol in localStorage: `gold-replay-v1` for gold,
   `replay-v1-<SYMBOL>` for everything else. Trades, drawings, EMAs, theme and zoom all live
   there — nothing is stored server-side.

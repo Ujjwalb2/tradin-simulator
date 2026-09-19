@@ -119,6 +119,11 @@
   .row label { color: var(--muted); }
   .row select { padding: 3px 2px; }
   .row input { width: 100%; }
+  .row input[type="checkbox"] { width: auto; justify-self: start; margin: 0; }
+  .sessrow { display: grid; grid-template-columns: auto 10px 1fr auto; align-items: center; gap: 7px;
+             margin-bottom: 5px; cursor: pointer; }
+  .sessrow i { width: 10px; height: 10px; border-radius: 2px; }
+  .sessrow input { margin: 0; }
   .pick { padding: 3px 0; border-color: var(--field); }
   .pick.on { background: var(--accent); color: #fff; }
   .buysell { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
@@ -288,6 +293,10 @@
     <h3>Indicators</h3>
     <div id="emaRows"></div>
 
+    <h3>Sessions</h3>
+    <div class="row"><label for="setBreaks">Day break</label><input id="setBreaks" type="checkbox" title="A dotted line where one trading day ends and the next one opens"><span class="small">line</span></div>
+    <div id="sessRows" title="Shade what each market has traded so far today"></div>
+
     <h3>Settings</h3>
     <div class="row"><label for="tzSel">Timezone</label><select id="tzSel" title="Timezone for the chart, clock and trade times"></select><span></span></div>
     <div class="row"><label for="setBal">Start balance</label><input id="setBal" type="number" step="100" min="100"><span></span></div>
@@ -342,6 +351,7 @@
       <li>Drawings are pinned to time and price, so they stay in place on every timeframe.</li>
       <li>EMAs: <b>ƒx EMA</b> adds one. Click an EMA's name in the chart legend (hover shows 👁 ⚙ ✕), double-click its line, or click <i>EMA</i> in the side panel to set length, source, colour, width, style. Changes show live; Cancel undoes them.</li>
       <li>Fib settings (double-click it): turn levels on/off, edit their values and colours, add or remove levels, extend lines, show levels/prices/background, reverse.</li>
+      <li><b>Sessions</b> (side panel): <i>Day break</i> draws a dotted line where one trading day ends and the next opens — gold's last candle is 16:55 New York and the next opens an hour later, NSE's is 15:25 IST and the next opens 09:15. Tick <b>Sydney</b>, <b>Tokyo</b>, <b>London</b> or <b>New York</b> to box what that market has traded so far, in its own local hours (so daylight saving looks after itself). The boxes grow with the replay and are hidden on the daily chart and when more than about six weeks are on screen.</li>
       <li>Switching timeframe keeps the replay candle on screen at the same zoom, like TradingView replay. Scroll left to load older bars.</li>
     </ul>
     <h4>Tickers</h4>

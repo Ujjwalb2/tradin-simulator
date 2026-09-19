@@ -33,11 +33,14 @@ const C = {
   up: '#26a69a', down: '#ef5350', volUp: 'rgba(38,166,154,0.28)', volDown: 'rgba(239,83,80,0.28)',
   buy: '#2962ff', sell: '#f23645', sl: '#f23645', tp: '#22ab94', order: '#ff9800',
   draw: '#5b9cf6', zone: 'rgba(91,156,246,0.13)', hline: '#b2b5be', win: '#22ab94', loss: '#f23645',
+  session: 'rgba(146,150,162,0.5)',
 };
 const FIELD_NAME = { inPrice: 'order price', inSL: 'stop loss', inTP: 'take profit' };
 const THEMES = {  // chart colours per theme; the page colours are CSS variables in index.html
-  dark: { bg: '#131722', text: '#d1d4dc', grid: 'rgba(42,46,57,0.6)', border: '#2a2e39', watermark: 'rgba(134,137,147,0.10)', handleFill: '#131722', hline: '#b2b5be' },
-  light: { bg: '#ffffff', text: '#131722', grid: '#f0f3fa', border: '#e0e3eb', watermark: 'rgba(106,109,120,0.10)', handleFill: '#ffffff', hline: '#787b86' },
+  dark: { bg: '#131722', text: '#d1d4dc', grid: 'rgba(42,46,57,0.6)', border: '#2a2e39', watermark: 'rgba(134,137,147,0.10)', handleFill: '#131722', hline: '#b2b5be',
+          session: 'rgba(146,150,162,0.5)' },
+  light: { bg: '#ffffff', text: '#131722', grid: '#f0f3fa', border: '#e0e3eb', watermark: 'rgba(106,109,120,0.10)', handleFill: '#ffffff', hline: '#787b86',
+           session: 'rgba(120,123,134,0.45)' },
 };
 let THEME = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 const TOOLS = {
@@ -64,6 +67,14 @@ const EMA_DEFAULTS = [{ on: true, len: 20, color: '#f7a21b' }, { on: true, len: 
 const EMA_COLORS = ['#f7a21b', '#5b9cf6', '#e040fb', '#22ab94', '#f23645', '#ffeb3b', '#00bcd4', '#ff7043', '#ab47bc', '#8bc34a'];
 const EMA_LENGTHS = [9, 21, 100, 34, 13, 89, 144, 233, 5, 8];
 const MAX_EMAS = 10;
+// The four FX sessions, in each city's own hours: using its timezone keeps daylight saving right.
+const SESSIONS = [
+  { key: 'sydney', name: 'Sydney', tz: 'Australia/Sydney', from: 8 * 60, to: 17 * 60, color: '#f7a21b' },
+  { key: 'tokyo', name: 'Tokyo', tz: 'Asia/Tokyo', from: 9 * 60, to: 18 * 60, color: '#e040fb' },
+  { key: 'london', name: 'London', tz: 'Europe/London', from: 8 * 60, to: 16 * 60 + 30, color: '#5b9cf6' },
+  { key: 'newyork', name: 'New York', tz: 'America/New_York', from: 8 * 60, to: 17 * 60, color: '#22ab94' },
+];
+const SESSION_MAX_DAYS = 45;   // zoomed out further than this the boxes are noise, so they go
 
 let LC;                        // LightweightCharts namespace
 let META, D, F;                // meta.json, data per timeframe, F = D['5m'] (the replay clock)
@@ -154,6 +165,7 @@ function defaults() {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return {
     tf: '15m', tz: TZS.some(([id]) => id === tz) ? tz : 'UTC', cursorT: null, speed: 2, stepBy: 'tf',
+    breaks: true, bands: null,
     balance0: 10000, commission: 0, slippage: 0,
     ordType: 'market', sizeMode: 'lots', lots: 0.1, riskPct: 1,
     positions: [], orders: [], trades: [], drawings: [], seq: 1,
@@ -171,6 +183,11 @@ function loadState() {  // this symbol's defaults from meta.json, then whatever 
   if (!(S.lotSize > 0)) S.lotSize = META.lot ?? 100;
   for (const k of ['positions', 'orders', 'trades', 'drawings']) if (!Array.isArray(S[k])) S[k] = [];
   S.drawings = S.drawings.filter((d) => d && TOOLS[d.type] && Array.isArray(d.pts));
+  if (typeof S.breaks !== 'boolean') S.breaks = true;
+  if (!S.bands || typeof S.bands !== 'object') {  // shade the FX sessions on a 24-hour market only
+    const fx = META.hasSpread !== false;
+    S.bands = { london: fx, newyork: fx };
+  }
   if (!Array.isArray(S.emas)) S.emas = EMA_DEFAULTS.map((e) => ({ ...e }));
   S.emas = S.emas.filter((e) => e && e.len >= 2).slice(0, MAX_EMAS).map((e) => ({ src: 'close', width: 1, style: 'solid', ...e }));
 }
@@ -374,6 +391,7 @@ function applyTheme(name) {  // light or dark, remembered for every ticker
   document.documentElement.dataset.theme = name;
   localStorage.setItem('replay-theme', name);
   C.hline = t.hline;
+  C.session = t.session;
   chart.applyOptions({
     layout: { background: { type: LC.ColorType.Solid, color: t.bg }, textColor: t.text },
     grid: { vertLines: { color: t.grid }, horzLines: { color: t.grid } },
@@ -1345,10 +1363,95 @@ function paintHandles(ctx, d) {
   ctx.restore();
 }
 
+function sessionWindow(sess, t) {  // when that session opens and closes on the local day holding t
+  const off = tzOffset(sess.tz, t);
+  const midnight = Math.floor((t + off) / 86400) * 86400;          // local seconds
+  const utcAt = (mins) => {
+    const local = midnight + mins * 60;
+    return local - tzOffset(sess.tz, local - off);                 // back to UTC, re-reading the offset
+  };
+  return [utcAt(sess.from), utcAt(sess.to)];
+}
+
+function paintSessionBreaks(ctx, H) {  // a line wherever one trading day ends and the next opens
+  if (!S.breaks || view.tf === '1d') return;
+  const r = chart.timeScale().getVisibleLogicalRange();
+  if (!r) return;
+  const T = D[view.tf], days = D['1d'];
+  const gFrom = Math.max(view.start, view.start + Math.floor(r.from));
+  const gTo = Math.min(view.k, view.start + Math.ceil(r.to));
+  if (gTo <= gFrom) return;
+  ctx.save();
+  ctx.strokeStyle = C.session;
+  ctx.setLineDash([2, 4]);
+  ctx.lineWidth = 1;
+  let lastX = -Infinity;
+  for (let d = tfIndexAt('1d', T.t[gFrom]) + 1; d < days.n; d++) {
+    const g = lowerBound(T.t, days.t[d]);                          // first bar of that session
+    if (g > gTo || g > view.k) break;
+    if (g <= gFrom) continue;
+    const x = logicalToX(g - view.start - 0.5);
+    if (x == null || x - lastX < 6) continue;                      // too close together to read
+    lastX = x;
+    ctx.beginPath();
+    ctx.moveTo(Math.round(x) + 0.5, 0);
+    ctx.lineTo(Math.round(x) + 0.5, H);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function paintSessionBands(ctx) {  // the high-low box each market session has traded so far
+  const on = SESSIONS.filter((sess) => S.bands[sess.key]);
+  if (!on.length || view.tf === '1d') return;
+  const r = chart.timeScale().getVisibleLogicalRange();
+  if (!r) return;
+  const seen = F.t[cursor] + F.sec;                                // nothing past the replay cursor
+  const t0 = logicalToTimeFrac(r.from), t1 = Math.min(logicalToTimeFrac(r.to), seen);
+  if (t1 <= t0 || t1 - t0 > SESSION_MAX_DAYS * 86400) return;
+  ctx.save();
+  ctx.font = FONT;
+  ctx.textBaseline = 'alphabetic';
+  ctx.setLineDash([]);
+  ctx.lineWidth = 1;
+  const labels = [];                                               // so overlapping sessions stay readable
+  for (const sess of on) {
+    for (let t = t0 - 86400; t <= t1 + 86400; t += 86400) {
+      const [open, close] = sessionWindow(sess, t);
+      if (close <= t0 || open >= t1) continue;
+      let top = -Infinity, bot = Infinity;
+      for (let j = lowerBound(F.t, open); j <= cursor && F.t[j] < close; j++) {
+        if (F.h[j] > top) top = F.h[j];
+        if (F.l[j] < bot) bot = F.l[j];
+      }
+      if (!Number.isFinite(top)) continue;                         // the market was shut
+      const x0 = logicalToX(timeToLogical(open)), x1 = logicalToX(timeToLogical(Math.min(close, seen)));
+      const yTop = candles.priceToCoordinate(top), yBot = candles.priceToCoordinate(bot);
+      if (x0 == null || x1 == null || yTop == null || yBot == null || x1 - x0 < 2) continue;
+      ctx.fillStyle = rgba(sess.color, 0.07);
+      ctx.strokeStyle = rgba(sess.color, 0.45);
+      ctx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
+      ctx.strokeRect(Math.round(x0) + 0.5, Math.round(yTop) + 0.5, Math.round(x1 - x0), Math.round(yBot - yTop));
+      if (x1 - x0 > 46) {
+        const lx = x0 + 4, lw = ctx.measureText(sess.name).width;
+        let y = yTop - 4;
+        for (let n = 0; n < 3 && labels.some((l) => Math.abs(l.y - y) < 11 && lx < l.x1 && lx + lw > l.x0); n++) y -= 12;
+        if (y < 10) y = yTop + 13;                                 // no room above: sit inside the box
+        labels.push({ x0: lx, x1: lx + lw, y });
+        ctx.fillStyle = rgba(sess.color, 0.95);
+        ctx.fillText(sess.name, lx, y);
+      }
+    }
+  }
+  ctx.restore();
+}
+
 function paintAll(ctx, W, H) {
   if (!view) return;
   paneW = W;
   const now = F.t[cursor];
+  paintSessionBands(ctx);
+  paintSessionBreaks(ctx, H);
   ctx.save();
   ctx.setLineDash([3, 3]);
   ctx.lineWidth = 1;
@@ -2247,6 +2350,20 @@ function bindUi() {
   $('#emaRows').addEventListener('input', onEmaInput);
   $('#emaRows').addEventListener('change', onEmaChange);
   $('#emaRows').addEventListener('click', onEmaClick);
+  const hhmm = (mins) => `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
+  $('#sessRows').innerHTML = SESSIONS.map((sess) => `<label class="sessrow"><input type="checkbox" data-sess="${sess.key}"` +
+    `${S.bands[sess.key] ? ' checked' : ''}><i style="background:${sess.color}"></i>${sess.name}` +
+    `<span class="small">${hhmm(sess.from)}–${hhmm(sess.to)}</span></label>`).join('');
+  $('#sessRows').addEventListener('change', (e) => {
+    const key = e.target.dataset.sess;
+    if (!key) return;
+    S.bands[key] = e.target.checked;
+    layer.redraw();
+    save();
+  });
+  const breaks = $('#setBreaks');
+  breaks.checked = S.breaks;
+  breaks.onchange = () => { S.breaks = breaks.checked; layer.redraw(); save(); };
   bindNumber('#setBal', 'balance0', 100);
   bindNumber('#setComm', 'commission', 0);
   bindNumber('#setSlip', 'slippage', 0);
