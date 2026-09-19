@@ -33,14 +33,14 @@ const C = {
   up: '#26a69a', down: '#ef5350', volUp: 'rgba(38,166,154,0.28)', volDown: 'rgba(239,83,80,0.28)',
   buy: '#2962ff', sell: '#f23645', sl: '#f23645', tp: '#22ab94', order: '#ff9800',
   draw: '#5b9cf6', zone: 'rgba(91,156,246,0.13)', hline: '#b2b5be', win: '#22ab94', loss: '#f23645',
-  session: 'rgba(146,150,162,0.5)',
+  session: 'rgba(178,181,190,0.85)',
 };
 const FIELD_NAME = { inPrice: 'order price', inSL: 'stop loss', inTP: 'take profit' };
 const THEMES = {  // chart colours per theme; the page colours are CSS variables in index.html
   dark: { bg: '#131722', text: '#d1d4dc', grid: 'rgba(42,46,57,0.6)', border: '#2a2e39', watermark: 'rgba(134,137,147,0.10)', handleFill: '#131722', hline: '#b2b5be',
-          session: 'rgba(146,150,162,0.5)' },
+          session: 'rgba(178,181,190,0.85)' },
   light: { bg: '#ffffff', text: '#131722', grid: '#f0f3fa', border: '#e0e3eb', watermark: 'rgba(106,109,120,0.10)', handleFill: '#ffffff', hline: '#787b86',
-           session: 'rgba(120,123,134,0.45)' },
+           session: 'rgba(96,101,116,0.7)' },
 };
 let THEME = document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
 const TOOLS = {
@@ -520,7 +520,8 @@ function showLegend(param) {  // hovered bar, or the forming bar when the mouse 
   const b = hovered || view.last;
   const chg = b.close - b.open, pct = (chg / b.open) * 100;
   $('#lgMain').innerHTML =
-    `<b>${SYMBOL}</b> <span class="src">· ${TF_LABEL[S.tf]} · ${META.source}${META.price === 'bid' ? ' bid' : ''}</span>` +
+    `<b>${SYMBOL}</b> <span class="src">· ${TF_LABEL[S.tf]} · ${META.source}${META.price === 'bid' ? ' bid' : ''}` +
+    ` · times in ${tzShort()}</span>` +
     `<span class="ohlc ${chg >= 0 ? 'pos' : 'neg'}">O ${px(b.open)} H ${px(b.high)} L ${px(b.low)} C ${px(b.close)} ` +
     `${chg >= 0 ? '+' : ''}${chg.toFixed(2)} (${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%)</span>`;
   syncEmaLegend();
@@ -1383,7 +1384,7 @@ function paintSessionBreaks(ctx, H) {  // a line wherever one trading day ends a
   if (gTo <= gFrom) return;
   ctx.save();
   ctx.strokeStyle = C.session;
-  ctx.setLineDash([2, 4]);
+  ctx.setLineDash([5, 4]);
   ctx.lineWidth = 1;
   let lastX = -Infinity;
   for (let d = tfIndexAt('1d', T.t[gFrom]) + 1; d < days.n; d++) {
