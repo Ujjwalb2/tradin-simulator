@@ -3,6 +3,9 @@
 **Conclusion: no profitable 5-minute strategy exists in this data.**
 Read [`FINDINGS.md`](FINDINGS.md).
 
+The live work is the chart replay dashboard below. [`PROJECT.md`](PROJECT.md) is the full
+handover: how it is built, what was decided, what is already verified and what is left.
+
 ## State (2026-09-10)
 
 Tested on **11.7 years** (2015-01 → 2026-09, 828,668 bars) with realistic per-bar spread costs.
