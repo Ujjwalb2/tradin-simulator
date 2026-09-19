@@ -1,0 +1,86 @@
+name: Update market data
+
+# Rebuilds both tickers once a day and pushes the new bars, so the published dashboard stays
+# current on its own. 05:30 UTC (11:00 IST) is after the previous day has closed everywhere
+# and after Dukascopy and Upstox publish it. Run it by hand any time from the Actions tab.
+on:
+  schedule:
+    - cron: '30 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install --quiet pandas numpy certifi
+
+      # The raw downloads (Dukascopy .bi5 days, Upstox months) are not in the repository, so
+      # they are cached between runs: a run then only fetches the days that are new.
+      - name: Restore download cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/raw
+          key: raw-${{ github.run_id }}
+          restore-keys: raw-
+
+      - name: Gold (Dukascopy)
+        id: gold
+        continue-on-error: true
+        run: python src/build_tf.py --no-tables
+
+      - name: NIFTY (Upstox)
+        id: nifty
+        continue-on-error: true
+        run: python src/build_nse.py --ticker NIFTY --no-tables
+
+      - name: Save download cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/raw
+          key: raw-${{ github.run_id }}
+
+      - name: Commit new bars
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add replay/data
+          if git diff --cached --quiet; then
+            echo "No new bars to publish." >> "$GITHUB_STEP_SUMMARY"
+          else
+            git commit -m "Data update $(date -u +%Y-%m-%d)"
+            git push
+            echo "Published new bars." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          python - >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json, pathlib
+          print("| ticker | 5m bars | last bar |")
+          print("|---|---|---|")
+          for meta in sorted(pathlib.Path("replay/data").glob("*/meta.json")):
+              m = json.loads(meta.read_text())
+              print(f"| {m['symbol']} | {m['tfs']['5m']['n']:,} | {m['last']} |")
+          PY
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "gold: ${{ steps.gold.outcome }}, nifty: ${{ steps.nifty.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Fail if neither ticker built
+        if: steps.gold.outcome == 'failure' && steps.nifty.outcome == 'failure'
+        run: exit 1

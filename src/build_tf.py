@@ -191,6 +191,7 @@ def main() -> None:
     ap.add_argument("--start", default="2020-01-01", help="first trading date to keep")
     ap.add_argument("--end", default=yesterday.isoformat(), help="last UTC day to fetch (max: yesterday)")
     ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--no-tables", action="store_true", help="skip the CSV/parquet exports (the replay data is still written)")
     args = ap.parse_args()
 
     symbol = args.symbol.upper()
@@ -201,7 +202,8 @@ def main() -> None:
     df1m = load_1m(symbol, start - dt.timedelta(days=1), end, args.workers)
     bars = build(df1m, start)
     validate(bars)
-    write_tables(bars, symbol)
+    if not args.no_tables:
+        write_tables(bars, symbol)
     write_replay(bars, symbol)
 
     print()
@@ -215,7 +217,7 @@ def main() -> None:
     missing = [day for day in weekdays if day not in sessions]
     print(f"weekdays with no session (holidays): {len(missing)}"
           + (f" -> {', '.join(str(x) for x in missing[:12])}" + (" ..." if len(missing) > 12 else "") if missing else ""))
-    print(f"\ntables : {TF_DIR}\nreplay : replay/data/{symbol}/")
+    print("\ntables : " + ("skipped" if args.no_tables else str(TF_DIR)) + f"\nreplay : replay/data/{symbol}/")
 
 
 if __name__ == "__main__":

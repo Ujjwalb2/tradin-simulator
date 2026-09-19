@@ -203,7 +203,9 @@ async function fetchOk(url) {
 }
 
 async function loadData() {
-  META = await (await fetchOk(`data/${SYMBOL}/meta.json`)).json();
+  const metaResponse = await fetchOk(`data/${SYMBOL}/meta.json`);
+  window.DATA_MODIFIED = metaResponse.headers.get('Last-Modified') || '';
+  META = await metaResponse.json();
   const out = {};
   await Promise.all(TFS.map(async (tf) => {
     const m = META.tfs[tf];
@@ -2294,15 +2296,16 @@ const stampOf = (x) => Date.parse(x) || 0;
 
 async function serverStamps() {
   const head = async (url) => stampOf((await fetch(url, { method: 'HEAD', cache: 'no-store' })).headers.get('Last-Modified'));
-  return { app: await head('app.js'), page: await head(location.pathname) };
+  return { app: await head('app.js'), page: await head(location.pathname), data: await head(`data/${SYMBOL}/meta.json`) };
 }
 
 async function watchForUpdates() {
-  const running = { app: stampOf(window.APP_MODIFIED), page: stampOf(document.lastModified) };
+  const running = { app: stampOf(window.APP_MODIFIED), page: stampOf(document.lastModified), data: stampOf(window.DATA_MODIFIED) };
   for (;;) {
     try {
       const now = await serverStamps();
-      if ((running.app && now.app > running.app + 1000) || (running.page && now.page > running.page + 1000)) {
+      const newer = ['app', 'page', 'data'].some((k) => running[k] && now[k] > running[k] + 1000);
+      if (newer) {
         $('#updateBar').style.display = 'flex';
         return;
       }

@@ -212,6 +212,7 @@ def main() -> None:
     ap.add_argument("--start", default=str(FIRST_MINUTE_DAY), help="first day of minute data (not before 2022-01-03)")
     ap.add_argument("--end", default=str(yesterday), help="last day to fetch (max: yesterday, IST)")
     ap.add_argument("--context-start", default="2015-01-01", help="daily-only history before the minute data")
+    ap.add_argument("--no-tables", action="store_true", help="skip the CSV/parquet exports (the replay data is still written)")
     args = ap.parse_args()
 
     inst = resolve(args.ticker)
@@ -227,10 +228,11 @@ def main() -> None:
     bars = build(minutes, days)
     validate(bars)
 
-    TF_DIR.mkdir(parents=True, exist_ok=True)
-    for tf, b in bars.items():
-        b.to_parquet(TF_DIR / f"{symbol}_{tf}.parquet")
-        b.to_csv(TF_DIR / f"{symbol}_{tf}.csv", date_format="%Y-%m-%d %H:%M:%S")
+    if not args.no_tables:
+        TF_DIR.mkdir(parents=True, exist_ok=True)
+        for tf, b in bars.items():
+            b.to_parquet(TF_DIR / f"{symbol}_{tf}.parquet")
+            b.to_csv(TF_DIR / f"{symbol}_{tf}.csv", date_format="%Y-%m-%d %H:%M:%S")
     write_symbol(symbol, bars, {
         "name": inst["name"], "source": "Upstox (NSE)", "price": "last", "ccy": "₹", "locale": "en-IN",
         "tz": "Asia/Kolkata", "lot": inst["lot"], "lotStep": 1, "lots": 1, "unit": "units" if inst["is_index"] else "shares",
@@ -248,7 +250,7 @@ def main() -> None:
     short = live[live["minutes"] < SESSION_MINUTES - 5]
     print(f"short sessions (special or missing minutes): {len(short)}"
           + (f" -> {', '.join(str(x) for x in short['date'].head(8))}" if len(short) else ""))
-    print(f"lot size default: {inst['lot']}\ntables : {TF_DIR}\nreplay : replay/data/{symbol}/")
+    print(f"lot size default: {inst['lot']}\ntables : " + ("skipped" if args.no_tables else str(TF_DIR)) + f"\nreplay : replay/data/{symbol}/")
 
 
 if __name__ == "__main__":
