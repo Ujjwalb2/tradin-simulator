@@ -36,6 +36,7 @@
   button.on { background: var(--raised); color: var(--strong); border-color: var(--edge); }
   button.primary { background: var(--accent); color: #fff; min-width: 78px; }
   button.primary:hover { background: #1e53e5; }
+  button:disabled { opacity: .4; cursor: default; background: transparent; }
   input, select { background: var(--bg); border: 1px solid var(--field); border-radius: 4px; padding: 4px 6px; min-width: 0; }
   input:focus, select:focus { outline: none; border-color: var(--accent); }
   input[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -192,6 +193,7 @@
   <span class="sep"></span>
   <button id="btnPlay" class="primary" title="Play / pause (Space)">▶ Play</button>
   <button id="btnStep" title="Step forward (→)">Step ⏭</button>
+  <button id="btnEnd" title="End the replay and go to the latest price (End key). Open trades play out on the way.">⏹ End replay</button>
   <select id="speedSel" title="Replay speed"></select>
   <select id="stepSel" title="How far one step moves"><option value="tf">Step: 1 bar</option><option value="5m">Step: 5 min</option></select>
   <span class="sep"></span>
@@ -247,7 +249,7 @@
   </div>
 
   <aside>
-    <div class="replaytime" title="Close of the last revealed 5-minute bar"><span>Replay time</span><b id="clock"></b></div>
+    <div class="replaytime" title="Close of the last revealed 5-minute bar"><span id="clockLabel">Replay time</span><b id="clock"></b></div>
     <h3>Quote</h3>
     <div class="quote">
       <div><span id="qBidLbl">Bid</span><b id="qBid">—</b></div>
@@ -316,6 +318,7 @@
     <h4>Replay</h4>
     <ul>
       <li>Pick a start with <b>Go</b> (date and time in the chart timezone), <b>🎲 Random</b>, or <b>⇤ Select bar</b> and click a bar.</li>
+      <li><b>⏹ End replay</b> (or the <kbd>End</kbd> key) goes to the latest price in the data; open trades and orders play out on the way. Start a new replay with Go, Random or Select bar.</li>
       <li><b>Step</b> reveals one chart bar, or five minutes when set to <i>Step: 5 min</i> (watch a 1H or 4H candle form). <b>Play</b> keeps stepping at the chosen speed.</li>
       <li>Switch timeframe at any time: the last bar on 15m, 1H, 4H and D is the one still forming, built from the 5-minute bars seen so far. The replay candle stays at the right edge with your zoom, and the price axis re-fits.</li>
       <li>Scrolled back into history? <b>»</b> (bottom right of the chart) brings you back to the replay candle. <kbd>Alt</kbd>/<kbd>⌥</kbd>+<kbd>R</kbd> does the same and resets the zoom.</li>

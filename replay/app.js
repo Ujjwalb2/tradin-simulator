@@ -526,6 +526,16 @@ function stepTarget() {
   return cursor < end ? end : lastFiveMinOf(S.tf, k + 1);
 }
 
+/* End the replay: go to the latest candle in the data. Open trades and pending orders play
+ * out bar by bar on the way, so stops and targets are honoured rather than skipped. */
+function endReplay() {
+  stopPlay();
+  if (cursor >= F.n - 1) return toast('Already at the latest price in the data');
+  while (cursor < F.n - 1) processBar(++cursor);
+  afterMove(true);
+  toast(`Replay ended: latest price, ${fmtTime(F.t[cursor] + 300, true)} ${tzShort()}`);
+}
+
 function stepOnce() {
   const target = stepTarget();
   if (target == null) {
@@ -799,6 +809,9 @@ function setText(sel, text, cls = '') {
 function updatePanels() {
   const bid = bidNow(), ask = askNow();
   $('#clock').textContent = `${fmtTime(F.t[cursor] + 300, true)} ${tzShort()}`;
+  const atLatest = cursor >= F.n - 1;
+  $('#clockLabel').textContent = atLatest ? 'Latest price (replay ended)' : 'Replay time';
+  $('#btnEnd').disabled = atLatest;
   $('#qBid').textContent = px(bid);
   $('#qAsk').textContent = px(ask);
   $('#qSpr').textContent = (ask - bid).toFixed(2);
@@ -2144,6 +2157,7 @@ function onKey(e) {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (el.tagName === 'BUTTON') el.blur();  // so Space does not also click the focused button
   if (e.key === 'ArrowRight') { e.preventDefault(); stopPlay(); stepOnce(); }
+  else if (e.key === 'End') { e.preventDefault(); endReplay(); }
   else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
   else if (e.key === 'Escape') {
     if ($('#drawSettings').classList.contains('open')) dialogCancel();
@@ -2159,6 +2173,7 @@ function bindUi() {
   $$('#tfGroup button').forEach((b) => { b.onclick = () => setTf(b.dataset.tf); });
   $('#btnPlay').onclick = togglePlay;
   $('#btnStep').onclick = () => { stopPlay(); stepOnce(); };
+  $('#btnEnd').onclick = endReplay;
   const speed = $('#speedSel');
   speed.innerHTML = SPEEDS.map((v) => `<option value="${v}">${v} bar${v === 1 ? '' : 's'}/s</option>`).join('');
   speed.value = String(S.speed);
