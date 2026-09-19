@@ -24,8 +24,8 @@ const TZS = [
   ['Asia/Singapore', 'Singapore', 'SGT'], ['Asia/Tokyo', 'Tokyo', 'JST'], ['Australia/Sydney', 'Sydney', 'Sydney'],
 ];
 const SPEEDS = [0.5, 1, 2, 4, 8, 16, 30];
-const MAX_BARS = 30000;        // history handed to the chart on a full redraw
-const VISIBLE_BARS = 160;      // bars in view after a jump or timeframe change
+const WINDOW_BARS = 5000;      // bars handed to the chart on a redraw; scrolling left loads more
+const DEFAULT_ZOOM = 160;      // bars across the screen until the user zooms
 const SYMBOL = (new URLSearchParams(location.search).get('symbol') || localStorage.getItem('replay-symbol') || 'XAUUSD').toUpperCase();
 const STORE_KEY = SYMBOL === 'XAUUSD' ? 'gold-replay-v1' : `replay-v1-${SYMBOL}`;  // one saved session per symbol
 const CDN_FALLBACK = 'https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js';
@@ -302,10 +302,14 @@ const volOf = (b) => ({ time: b.time, value: b.v, color: b.close >= b.open ? C.v
 const candleOf = (b) => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close });
 
 /* Redraw the current timeframe up to the cursor; `from` keeps a wider window loaded earlier. */
-function renderFull(resetView, from = null) {
+/* Redraw the current timeframe up to the cursor. With `keepZoom` the replay candle lands at
+ * the right edge at the zoom the user had (see showReplayEdge); `from` keeps a wider window
+ * that was loaded earlier by scrolling left. */
+function renderFull(keepZoom, from = null) {
+  const zoom = keepZoom ? currentZoom() : null;  // read before the data changes
   const tf = S.tf;
   const k = tfIndexAt(tf, F.t[cursor]);
-  const start = from ?? Math.max(0, k - MAX_BARS);
+  const start = from ?? Math.max(0, k - Math.max(WINDOW_BARS, 4 * (S.zoomBars || 0)));
   const bars = [];
   for (let i = start; i < k; i++) bars.push(closedBar(tf, i));
   const last = formingBar(tf, k);
@@ -314,8 +318,24 @@ function renderFull(resetView, from = null) {
   volume.setData(bars.map(volOf));
   view = { tf, start, k, prevK: k, last };
   renderEmas(true);
-  if (resetView) chart.timeScale().setVisibleLogicalRange({ from: bars.length - VISIBLE_BARS, to: bars.length + 12 });
+  if (keepZoom) showReplayEdge(zoom);
   refreshOverlays();
+}
+
+function currentZoom() {  // bars across the screen and the margin right of the replay candle
+  const r = chart.timeScale().getVisibleLogicalRange();
+  return r && view ? { bars: r.to - r.from, gap: r.to - (view.k - view.start) } : null;
+}
+
+/* Put the replay candle at the right edge the way TradingView does after a timeframe change or
+ * a jump: the same zoom (bars across the screen), a small margin, and the price axis back on
+ * auto so the candles can never end up off-screen or squashed by an old manual scale. */
+function showReplayEdge(zoom, gap = null) {
+  const last = view.k - view.start;
+  const bars = clamp(zoom ? zoom.bars : S.zoomBars || DEFAULT_ZOOM, 20, 5000);
+  const margin = clamp(gap ?? (zoom ? zoom.gap : 5), 3, bars * 0.4);
+  chart.priceScale('right').applyOptions({ autoScale: true });
+  chart.timeScale().setVisibleLogicalRange({ from: Math.max(last + margin - bars, -3), to: last + margin });
 }
 
 function renderStep() {
@@ -364,28 +384,29 @@ function applyTfOptions() {
 /* Switching timeframe keeps the replay candle on screen with the same zoom (bars across the
  * screen) and right margin, the way TradingView's replay does. It never centres on an older
  * view, so there is no jump and nothing after the replay time can appear. */
-function setTf(tf) {
+function setTf(tf) {  // lands on the replay candle with the same zoom, like TradingView replay
   if (!TFS.includes(tf) || tf === S.tf) return;
-  const r = chart.timeScale().getVisibleLogicalRange();
-  const zoom = r && view ? { bars: r.to - r.from, gap: r.to - (view.k - view.start) } : null;
   S.tf = tf;
   draft = null;
   applyTfOptions();
-  renderFull(!zoom);
-  if (zoom) {
-    const last = view.k - view.start, bars = Math.max(20, zoom.bars), gap = clamp(zoom.gap, 3, bars * 0.4);
-    chart.timeScale().setVisibleLogicalRange({ from: last + gap - bars, to: last + gap });
-  }
+  renderFull(true);
   save();
 }
 
 let extending = false;
-function onVisibleRangeChange(r) {  // scrolled to the oldest loaded bar: load older ones, keep the view
-  if (!r || !view || extending || view.start === 0 || r.from > 30) return;
+function onVisibleRangeChange(r) {  // remember the zoom; near the oldest loaded bar, load older ones
+  if (!r || !view) return;
+  if (!extending) {
+    S.zoomBars = Math.round(r.to - r.from);
+    save();
+  }
+  const last = view.k - view.start;
+  $('#toEdge').style.display = last > r.to - 1 || last < r.from ? 'grid' : 'none';
+  if (extending || view.start === 0 || r.from > Math.max(30, (r.to - r.from) / 2)) return;
   extending = true;
   setTimeout(() => {
     const range = chart.timeScale().getVisibleLogicalRange();
-    const add = Math.min(view.start, MAX_BARS);
+    const add = Math.min(view.start, WINDOW_BARS);
     renderFull(false, view.start - add);
     if (range) chart.timeScale().setVisibleLogicalRange({ from: range.from + add, to: range.to + add });
     extending = false;
@@ -2107,6 +2128,10 @@ function onKey(e) {
     if (e.key === 'y' || e.shiftKey) redo(); else undo();
     return;
   }
+  if (e.altKey && e.code === 'KeyR') {  // like TradingView's reset: replay candle, default zoom, auto scale
+    e.preventDefault();
+    return showReplayEdge({ bars: DEFAULT_ZOOM, gap: 5 });
+  }
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (el.tagName === 'BUTTON') el.blur();  // so Space does not also click the focused button
   if (e.key === 'ArrowRight') { e.preventDefault(); stopPlay(); stepOnce(); }
@@ -2176,6 +2201,7 @@ function bindUi() {
   tz.value = S.tz;
   tz.onchange = () => setTz(tz.value);
   $('#btnHelp').onclick = () => $('#help').classList.add('open');
+  $('#toEdge').onclick = () => showReplayEdge(currentZoom(), 5);
   $('#btnTheme').onclick = () => applyTheme(THEME === 'dark' ? 'light' : 'dark');
   $('#help').onclick = (e) => { if (e.target.id === 'help' || e.target.closest('[data-close]')) $('#help').classList.remove('open'); };
 
