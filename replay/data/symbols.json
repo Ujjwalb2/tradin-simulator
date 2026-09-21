@@ -4,6 +4,10 @@
   "name": "Gold spot (XAU/USD)"
  },
  {
+  "symbol": "BTCUSDT",
+  "name": "Bitcoin (BTC/USDT)"
+ },
+ {
   "symbol": "NIFTY",
   "name": "NIFTY 50"
  }

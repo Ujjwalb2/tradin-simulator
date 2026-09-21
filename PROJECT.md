@@ -22,20 +22,20 @@ Paste this:
 Two separate things share it:
 
 1. **The replay dashboard (`replay/`) — the live work.** A TradingView-style bar replay with
-   manual paper trading, drawing tools and EMAs, on gold and NSE data.
+   manual paper trading, drawing tools and EMAs, on gold, Bitcoin and NSE data.
 2. **Retired gold research (`FINDINGS.md`, `AOD_RETIRED.md`, `research/`, `src/aod*.py`,
    `src/strategy.py`).** Conclusion: no profitable 5-minute gold strategy exists in 11.7 years
    of data; the spread beats every intraday edge tested. Do not restart it without a new idea.
 
 ## Data
 
-| | gold | NSE (NIFTY and any other ticker) |
-|---|---|---|
-| source | Dukascopy `.bi5` 1-minute bid **and** ask candles | Upstox v3 public historical API, no login |
-| history | 5m from 2020-01-01 (research set has 1m from 2015) | 1m from 2022-01-03 (oldest served), daily from 2015 as context |
-| prices | OHLC are **bid**, ask OHLC alongside on 5m | last traded price only, no bid/ask |
-| sessions | 17:00 → 17:00 New York, 5 per week; 4h at 17, 21, 01, 05, 09, 13 NY | 09:15–15:30 IST; 1h at 09:15, 10:15 …; 4h = 09:15–13:15 and 13:15–15:30 |
-| builder | `src/build_tf.py` | `src/build_nse.py --ticker NIFTY` |
+| | gold | Bitcoin (BTCUSDT, any `…USDT` pair) | NSE (NIFTY and any other ticker) |
+|---|---|---|---|
+| source | Dukascopy `.bi5` 1-minute bid **and** ask candles | Binance public files, data.binance.vision (5m klines) | Upstox v3 public historical API, no login |
+| history | 5m from 2020-01-01 (research set has 1m from 2015) | 5m from 2020-01-01 (`--start 2017-08-17` for all of it) | 1m from 2022-01-03 (oldest served), daily from 2015 as context |
+| prices | OHLC are **bid**, ask OHLC alongside on 5m | last traded price, no bid/ask; volume in BTC | last traded price only, no bid/ask |
+| sessions | 17:00 → 17:00 New York, 5 per week; 4h at 17, 21, 01, 05, 09, 13 NY | 24/7, plain UTC buckets: daily 00:00 → 00:00 UTC, 4h at 00, 04 … 20 UTC | 09:15–15:30 IST; 1h at 09:15, 10:15 …; 4h = 09:15–13:15 and 13:15–15:30 |
+| builder | `src/build_tf.py` | `src/build_binance.py --symbol BTCUSDT` | `src/build_nse.py --ticker NIFTY` |
 
 - Raw downloads live in `data/raw/` and are **not** in git (large, re-downloadable). The
   dashboard's data in `replay/data/` **is** committed — the site loads it directly.
@@ -48,13 +48,19 @@ Two separate things share it:
   the page — the ticker menu picks it up from `symbols.json`.
 
 **Checked against known events:** gold 2074.80 (Aug 2020) and 3499.92 (Apr 2025); NIFTY
-7,610.25 (Mar 2020 low), 26,277.35 (Sep 2024 high), 21,281.45 (Jun 2024 election-day low).
+7,610.25 (Mar 2020 low), 26,277.35 (Sep 2024 high), 21,281.45 (Jun 2024 election-day low);
+BTCUSDT 3,782.13 (13 Mar 2020 low), 69,000.00 (10 Nov 2021 high), 15,476.00 (FTX low, 21 Nov
+2022), 126,199.63 (all-time high, 6 Oct 2025) — all exact.
 
 **Known data quirks**
 - NIFTY daily closes are the last traded value at 15:29, which differs from NSE's official
   close (a 30-minute average) on volatile days.
 - investing.com was tried and rejected as a source: its data API answers 403 to scripts
   (Cloudflare) and its downloads are daily/weekly/monthly only.
+- Binance's files switched from millisecond to **microsecond** timestamps on 2025-01-01; the
+  builder reads both. Binance's REST API is avoided on purpose: it refuses US addresses, which
+  is where GitHub's runners are. The 5m series has 504 missing bars, all Binance maintenance
+  outages (longest 5h50m on 2020-02-19); zero-volume klines are dropped like gold's padding.
 - Dukascopy answers 503 under load; the downloader retries. A missing day file is cached as an
   empty file meaning "no data that day", and those markers are forgotten for the last 7 days so
   a not-yet-published day is retried.
@@ -115,7 +121,9 @@ only the stop loss is checked. NSE has no bid/ask, so both sides fill at the las
   sessions are defined in `SESSIONS` by each city's own local hours, so daylight saving is the
   timezone's problem, not ours. Boxes are built from revealed 5m bars only, so they grow with the
   replay; they are skipped on the daily chart and past `SESSION_MAX_DAYS` on screen. They default
-  on for a 24-hour market (gold) and off for NSE.
+  on where `meta.json` has `fxSessions` (gold, crypto) or the market has a spread, off for NSE.
+- Lot sizes follow each symbol's `lotStep` (0.01 gold, 0.001 BTC, 1 for NSE) for rounding and
+  display (`lotDecimals`).
 - Session state (`S`) is saved per symbol in localStorage: `gold-replay-v1` for gold,
   `replay-v1-<SYMBOL>` for everything else. Trades, drawings, EMAs, theme and zoom all live
   there — nothing is stored server-side.
@@ -164,13 +172,18 @@ Do not re-learn these:
 - Both a light and a dark theme.
 - The data updates itself daily rather than being rebuilt by hand.
 
-## State on 2026-09-19
+## State on 2026-09-21
 
-- Both tickers carry data through **2026-09-18**; the site serves it.
-- The daily job's gold timeout is fixed and pushed (`35bed80`), but has **not yet run on
-  GitHub** — it needs one manual run from the Actions tab to confirm.
-- Everything local is committed and pushed; nothing is in flight.
+- Three tickers: XAUUSD and NIFTY through **2026-09-18** (Friday), BTCUSDT through
+  **2026-09-20**. The daily job keeps them current; GitHub often starts scheduled runs hours
+  late (the 2026-09-20 one ran at 09:54 UTC, not 05:30), which is harmless.
+- The gold timeout fix is confirmed on GitHub: run 35434160290, whole job 4½ minutes.
+- BTCUSDT was added on 2026-09-21. Its top-up is verified locally (byte-identical to a full
+  build after rewinding 3, 10 and 40 days) but **not yet on GitHub's runners** — the first run
+  after it was pushed shows whether data.binance.vision answers from there.
+- Everything local is committed and pushed.
 
-**Possible next steps, none started:** more NSE tickers (one command each), gold history before
-2020 (the 1-minute research data reaches back to 2015), a trade-statistics panel, or exporting a
-replay session for review.
+**Possible next steps, none started:** a percentage fee setting (crypto exchanges charge a % of
+the trade; the app's commission is a fixed amount per lot), more tickers (one command each),
+gold history before 2020 (the 1-minute research data reaches back to 2015), a trade-statistics
+panel, or exporting a replay session for review.

@@ -115,7 +115,8 @@ function money(x, signed = false) {  // in the symbol's currency: $10,000.00 or 
   const s = Math.abs(x).toLocaleString(META.locale || 'en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return (x < 0 ? `−${c}` : signed && x > 0 ? `+${c}` : c) + s;
 }
-const fmtLots = (x) => x.toFixed((META.lotStep || 0.01) < 1 ? 2 : 0);
+const lotDecimals = () => Math.max(0, Math.ceil(-Math.log10(META.lotStep || 0.01) - 1e-9));
+const fmtLots = (x) => x.toFixed(lotDecimals());
 const signCls = (x) => (x > 0 ? 'pos' : x < 0 ? 'neg' : '');
 
 // Seconds to add to a UTC instant to get the wall clock in `tz`, cached per UTC hour.
@@ -185,7 +186,7 @@ function loadState() {  // this symbol's defaults from meta.json, then whatever 
   S.drawings = S.drawings.filter((d) => d && TOOLS[d.type] && Array.isArray(d.pts));
   if (typeof S.breaks !== 'boolean') S.breaks = true;
   if (!S.bands || typeof S.bands !== 'object') {  // shade the FX sessions on a 24-hour market only
-    const fx = META.hasSpread !== false;
+    const fx = META.fxSessions ?? (META.hasSpread !== false);
     S.bands = { london: fx, newyork: fx };
   }
   if (!Array.isArray(S.emas)) S.emas = EMA_DEFAULTS.map((e) => ({ ...e }));
@@ -647,16 +648,16 @@ const openPnl = (p) => pnlUsd(p.side, p.entry, exitPriceNow(p), p.lots) - S.comm
 const balance = () => S.trades.reduce((a, t) => a + t.pnl, S.balance0);
 const equity = () => S.positions.reduce((a, p) => a + openPnl(p), balance());
 
-function sizeFor(entry, sl) {  // lots in the symbol's lot step (0.01 gold, whole NSE lots), or an error
+function sizeFor(entry, sl) {  // lots in the symbol's lot step (0.01 gold, 0.001 BTC, whole NSE lots), or an error
   const step = META.lotStep || 0.01;
   if (S.sizeMode === 'risk') {
     if (sl == null) return 'Risk % sizing needs a stop loss';
     const budget = (equity() * S.riskPct) / 100;
     const perLot = Math.abs(entry - sl) * S.lotSize + S.commission;
-    const lots = +(Math.floor(budget / perLot / step + 1e-9) * step).toFixed(2);
+    const lots = +(Math.floor(budget / perLot / step + 1e-9) * step).toFixed(lotDecimals());
     return lots >= step ? lots : `${S.riskPct}% risk (${money(budget)}) is less than ${fmtLots(step)} lot at this stop`;
   }
-  const lots = +(Math.round(S.lots / step) * step).toFixed(2);
+  const lots = +(Math.round(S.lots / step) * step).toFixed(lotDecimals());
   return lots >= step ? lots : `Size must be at least ${fmtLots(step)} lot`;
 }
 

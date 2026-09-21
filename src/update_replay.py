@@ -11,8 +11,9 @@ same source, rebuilds those sessions and replaces the tail with them. Rebuilding
 that is already published, rather than only what is missing, means a day the source has since
 revised gets corrected instead of doubled.
 
-This is what the daily GitHub job runs. A full rebuild has to download about 4,200 Dukascopy
-day files, which that feed is far too rate-limited to serve inside a job's time limit.
+This is what the daily GitHub job runs, for gold (Dukascopy), NSE (Upstox) and crypto (Binance).
+A full rebuild of gold has to download about 4,200 Dukascopy day files, which that feed is
+far too rate-limited to serve inside a job's time limit.
 """
 from __future__ import annotations
 
@@ -27,6 +28,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import build_binance  # noqa: E402
 import build_nse  # noqa: E402
 import build_tf  # noqa: E402
 from replay_data import PRICE_SCALE, REPLAY_DATA, epoch_seconds, read_symbol, write_symbol  # noqa: E402
@@ -70,6 +72,19 @@ def fresh_nse(ticker: str, since: dt.date) -> dict[str, pd.DataFrame] | None:
                               index=pd.DatetimeIndex([], tz="UTC", name="time_utc"))
     bars = build_nse.build(minutes, no_context)
     build_nse.validate(bars)
+    return bars
+
+
+def fresh_binance(symbol: str, since: dt.date) -> dict[str, pd.DataFrame] | None:
+    """Rebuild Binance days from `since` on: one small file per day."""
+    yesterday = dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=1)
+    if since > yesterday:
+        return None
+    df5 = build_binance.load_5m(symbol, since, yesterday)
+    if df5.empty:
+        return None
+    bars = build_binance.build(df5)
+    build_binance.validate(bars)
     return bars
 
 
@@ -126,9 +141,12 @@ def update(symbol: str, days: int, workers: int) -> bool:
     was = old["5m"].index[-1]
     print(f"\n=== {symbol}: published through {was:%Y-%m-%d %H:%M} UTC", flush=True)
 
-    if meta.get("source", "").startswith("Upstox"):
+    source = meta.get("source", "")
+    if source.startswith("Upstox"):
         ist = was + pd.Timedelta(seconds=build_nse.IST_OFFSET)
         fresh = fresh_nse(ticker_of(symbol, meta), (ist - pd.Timedelta(days=days)).date())
+    elif source.startswith("Binance"):
+        fresh = fresh_binance(symbol, (was - pd.Timedelta(days=days)).date())
     else:
         fresh = fresh_gold(symbol, (was - pd.Timedelta(days=days)).date(), workers)
     if fresh is None:

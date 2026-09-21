@@ -23,8 +23,8 @@ spread merely doubled. That is a regime, not an edge.
 
 ## Chart replay (manual backtesting)
 
-**Live:** https://ujjwalb2.github.io/tradin-simulator/ (XAUUSD and NIFTY, data up to the last
-build). Trades, drawings and settings are saved in each browser, per ticker.
+**Live:** https://ujjwalb2.github.io/tradin-simulator/ (XAUUSD, BTCUSDT and NIFTY, updated
+daily). Trades, drawings and settings are saved in each browser, per ticker.
 
 The dashboard's data (`replay/data/`) is in the repository so the site can load it; the
 research data is not. A GitHub Action (`.github/workflows/update-data.yml`) adds the previous
@@ -39,8 +39,9 @@ serves inside a job). Run it by hand from the Actions tab (*Run workflow*, with 
 ./.venv/bin/python src/update_replay.py --verify    # re-read and check what is published
 ```
 
-`src/build_tf.py` (gold) and `src/build_nse.py` (NIFTY / other NSE tickers) rebuild a ticker
-from scratch, or add a new one.
+`src/build_tf.py` (gold), `src/build_nse.py` (NIFTY / other NSE tickers) and
+`src/build_binance.py` (BTCUSDT / other Binance pairs) rebuild a ticker from scratch, or add a
+new one.
 
 `replay/` is a small TradingView-style bar-replay tool on the same Dukascopy data, from
 2020-01-02: 5m / 15m / 1H / 4H / D candles, replay from any date without seeing the future
@@ -87,6 +88,7 @@ API answers 403 to scripts, and its downloads are daily/weekly/monthly only.
 src/fetch_data.py     Dukascopy downloader: 1m bid+ask candles -> 5m bars
 src/build_tf.py       gold 5m/15m/1h/4h/1d bars from 2020 -> data/tf/ and replay/data/XAUUSD/
 src/build_nse.py      NSE index/stock bars from Upstox -> data/tf/ and replay/data/<TICKER>/
+src/build_binance.py  crypto bars (BTCUSDT ...) from Binance's public files -> replay/data/<PAIR>/
 src/replay_data.py    shared reader/writer for the replay tool's data format
 src/update_replay.py  daily top-up: rebuilds the last few days onto the published bars
 replay/               bar-replay chart + paper trading (index.html, app.js, serve.py)

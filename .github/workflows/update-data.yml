@@ -1,9 +1,9 @@
 name: Update market data
 
-# Adds the newest days to both tickers once a day and pushes them, so the published dashboard
+# Adds the newest days to every ticker once a day and pushes them, so the published dashboard
 # stays current on its own. 05:30 UTC (11:00 IST) is after the previous day has closed
-# everywhere and after Dukascopy and Upstox publish it. Run it by hand any time from the
-# Actions tab; raise "days" there to redo a longer tail after an outage.
+# everywhere and after Dukascopy, Upstox and Binance publish it. Run it by hand any time
+# from the Actions tab; raise "days" there to redo a longer tail after an outage.
 on:
   schedule:
     - cron: '30 5 * * *'
@@ -46,7 +46,7 @@ jobs:
       # Reads the bars already in replay/data, rebuilds only the last few days on top of them
       # and rewrites the tail. A full rebuild would mean ~4,200 Dukascopy day files, which
       # that feed is far too rate-limited to serve inside this job.
-      - name: Top up both tickers
+      - name: Top up every ticker
         id: update
         timeout-minutes: 20
         env:
